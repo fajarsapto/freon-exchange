@@ -1,0 +1,665 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FREON EXCHANGE | Sepolia</title>
+<style>
+:root{--bg:#0b1020;--panel:#131b31;--panel2:#192440;--text:#eef3ff;--muted:#9aa9c7;--line:#2a3654;--green:#42e0a0;--red:#ff6e7b;--blue:#7ca7ff;--gold:#ffc96b}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 20% 0%,#17264a 0,#0b1020 42%);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--text)}
+.wrap{max-width:1120px;margin:auto;padding:24px 16px 60px}.top{display:flex;align-items:flex-start;justify-content:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:28px;flex-direction:column}
+.brand{display:flex;gap:12px;align-items:center}.logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#7ca7ff,#6a5cff);display:grid;place-items:center;font-weight:900;color:#071020;box-shadow:0 8px 28px #586bff55}.brand h1{font-size:20px;margin:0;letter-spacing:.08em}.brand p{margin:4px 0 0;color:var(--muted);font-size:12px}
+button,input{font:inherit}.btn{border:1px solid var(--line);border-radius:12px;padding:12px 15px;background:var(--panel2);color:var(--text);font-weight:700;cursor:pointer}.btn.primary{background:linear-gradient(135deg,#7ca7ff,#9b8cff);border:0;color:#081124}.btn:disabled{opacity:.45;cursor:not-allowed}.network{font-size:12px;color:var(--gold);border:1px solid #70592c;background:#382c1a;padding:8px 10px;border-radius:999px}.wallet-controls{display:flex;flex-direction:column;align-items:flex-end;gap:9px}.network-switcher{display:none;gap:7px;flex-wrap:wrap;justify-content:flex-end}.network-switcher.visible{display:flex}.network-btn{font-size:12px;padding:8px 11px;border-radius:9px}.network-btn.active{border-color:var(--green);background:#12362d;color:#aaf6d8}
+.hero{display:grid;grid-template-columns:1.4fr .8fr;gap:18px;margin-bottom:18px}.card{background:linear-gradient(180deg,#151e35,#11182b);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:0 18px 60px #0002}.eyebrow{font-size:11px;color:var(--blue);letter-spacing:.15em;text-transform:uppercase;font-weight:800}.price{font-size:clamp(28px,5vw,46px);font-weight:850;margin:10px 0 4px;letter-spacing:-.04em}.muted{color:var(--muted)}.small{font-size:12px;line-height:1.6}.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.stat{padding:15px;background:#0e1527;border:1px solid var(--line);border-radius:14px}.stat label{display:block;font-size:12px;color:var(--muted);margin-bottom:8px}.stat strong{font-size:18px;word-break:break-word}
+.layout{display:grid;grid-template-columns:1fr 1fr;gap:18px}.tabs{display:flex;background:#0b1222;padding:4px;border-radius:13px;margin-bottom:18px}.tabs button{flex:1;border:0;background:transparent;color:var(--muted);padding:10px;border-radius:10px;cursor:pointer;font-weight:800}.tabs button.active{background:#263657;color:#fff}
+.field{margin:14px 0}.field label{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:8px}.inputrow{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:#0a1120;border-radius:12px;padding:0 12px}.inputrow input{width:100%;background:transparent;border:0;outline:0;color:#fff;padding:15px 0;min-width:0}.inputrow span{font-size:12px;color:var(--muted);font-weight:800}.quote{background:#0c1425;border:1px solid var(--line);padding:13px;border-radius:12px;margin:14px 0;font-size:13px}.quote div{display:flex;justify-content:space-between;gap:12px;margin:7px 0}.quote strong{word-break:break-all;text-align:right}.full{width:100%;margin-top:8px}.notice{padding:13px 14px;border-radius:12px;margin:14px 0;font-size:13px;line-height:1.55;border:1px solid #4a5e83;background:#172643;color:#dce8ff}.notice.warn{border-color:#765d2d;background:#332818;color:#ffe3ad}.notice.error{border-color:#773947;background:#351b29;color:#ffc3cb}.notice.success{border-color:#276b53;background:#102c26;color:#aaf6d8}.sectiontitle{margin:0 0 16px;font-size:17px}.divider{height:1px;background:var(--line);margin:18px 0}.hidden{display:none !important}
+#setupNotice{display:none !important}.admingrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.admingrid .btn{width:100%}footer{color:var(--muted);font-size:12px;line-height:1.7;margin-top:22px;text-align:center}a{color:#9bb9ff}
+@media(max-width:760px){.hero,.layout{grid-template-columns:1fr}.wrap{padding:16px 12px 40px}.card{padding:18px}.top{align-items:flex-start}.stats{grid-template-columns:1fr 1fr}}
+.wallet-controls{display:flex;flex-direction:column;align-items:flex-start;gap:10px}.wallet-controls-inner{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-start}.network-switcher{justify-content:flex-start}.price-toggle{display:inline-flex;gap:8px;margin:8px 0}.price-toggle button{border:1px solid var(--line);border-radius:9px;padding:8px 12px;background:var(--panel2);color:var(--text);font-weight:700}.price-toggle button.active{border-color:var(--green);color:var(--green)}#priceChart{width:100%;height:190px;display:block}.chart-note{font-size:11px;color:var(--muted);margin-top:8px}.muted.small:empty{display:none} footer{overflow-wrap:anywhere} footer a{color:#9bb9ff}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <div class="brand"><div><h1>FREON EXCHANGE</h1><p>FRN Exchange · Multi-Network</p></div></div>
+  <div class="wallet-controls"><div class="wallet-controls-inner"><span class="network" id="networkBadge">Sepolia · Chain 11155111</span><button class="btn primary" id="connectBtn">Connect Wallet</button></div><div id="networkSwitcher" class="network-switcher" aria-label="Select network"><button class="btn network-btn active" data-chain="11155111">Ethereum Sepolia</button><button class="btn network-btn" data-chain="56">BNB Smart Chain</button></div></div>
+</header>
+
+<div class="notice warn" id="setupNotice"><b>Setup required:</b> Connect your wallet to continue.</div>
+
+<section class="hero">
+  <div class="card">
+    <div class="eyebrow">Current Price</div>
+    <div class="price" id="price">— ETH / FRN</div>
+    <div class="price-toggle"><button id="priceForward" class="active">ETH / FRN</button><button id="priceReverse">FRN / ETH</button></div>
+    <div class="stat" style="margin-top:10px"><label>Estimated FRN Price (USD)</label><strong id="usdFrnPrice">—</strong><div class="muted small" id="usdNativeDisplay">USD / Native: —</div></div>
+    <div class="muted small"></div>
+    <div class="divider"></div>
+    <div class="stats">
+      <div class="stat"><label>Buy Fee</label><strong id="buyFee">—</strong></div>
+      <div class="stat"><label>Sell Fee (dynamic)</label><strong id="sellFee">—</strong></div>
+    </div>
+    <div class="divider"></div>
+    <div class="eyebrow">Price Chart</div>
+    <div class="price-toggle"><button id="chart1h" class="active">1 Hour</button><button id="chart24h">24 Hours</button></div>
+    <canvas id="priceChart" height="190"></canvas>
+    <div class="chart-note" id="chartNote">Chart builds from observed on-page prices.</div>
+  </div>
+  <div class="card">
+    <div class="eyebrow">Wallet</div>
+    <div style="font-size:18px;font-weight:800;margin:10px 0" id="walletAddress">Not connected</div>
+    <div class="muted small"></div>
+    <div class="divider"></div>
+    <div class="stats">
+      <div class="stat"><label>Wallet FRN</label><strong id="walletFrn">—</strong></div>
+      <div class="stat"><label>Wallet native coin</label><strong id="walletEth">—</strong></div>
+    </div>
+  </div>
+</section>
+
+<section class="layout">
+  <div class="card">
+    <h2 class="sectiontitle">Trade FRN</h2>
+    <div class="tabs"><button id="buyTab" class="active">Buy FRN</button><button id="sellTab">Sell FRN</button></div>
+    <div id="buyPanel">
+      <div class="field"><label><span>Pay with</span><span>Available native coin: <b id="availableEth">—</b></span></label><div class="inputrow"><input id="buyAmount" type="number" min="0" step="any" placeholder="0.0"><span>ETH</span></div></div>
+      <div class="quote"><div><span>Estimated FRN out</span><strong id="buyQuote">—</strong></div><div><span>Buy fee</span><strong id="buyFeeQuote">—</strong></div></div>
+      <button class="btn primary full" id="buyBtn" disabled>Buy FRN</button>
+    </div>
+    <div id="sellPanel" class="hidden">
+      <div class="field"><label><span>Sell amount</span><span>Available FRN: <b id="availableFrn">—</b></span></label><div class="inputrow"><input id="sellAmount" type="number" min="0" step="any" placeholder="0.0"><span>FRN</span></div></div>
+      <div class="quote"><div><span>Estimated native coin out</span><strong id="sellQuote">—</strong></div><div><span>Estimated sell fee</span><strong id="sellFeeQuote">—</strong></div></div>
+      <button class="btn primary full" id="sellBtn" disabled>Approve & Sell FRN</button>
+      <div class="small muted" style="margin-top:10px"></div>
+    </div>
+    <div id="tradeMessage" class="notice hidden"></div>
+  </div>
+
+  <div class="card">
+    <h2 class="sectiontitle">Status</h2>
+    <div class="stats">
+      <div class="stat"><label>Exchange status</label><strong id="exchangeStatus">—</strong></div>
+      <div class="stat"><label>Buy status</label><strong id="buyStatus">—</strong></div>
+      <div class="stat"><label>Sell status</label><strong id="sellStatus">—</strong></div>
+      <div class="stat"><label>Wallet status</label><strong id="blacklistStatus">—</strong></div>
+    </div>
+    <div class="notice" id="lastTx">Latest transaction</div>
+    <div id="adminPanel" class="hidden">
+    <h3 class="sectiontitle">Admin panel</h3>
+    
+    <div class="field">
+      <h4>1. Deposit FRN</h4>
+      
+      <div class="inputrow"><input id="depositFrnAmount" type="number" min="0" step="any" placeholder="FRN amount"><span>FRN</span></div>
+      <button class="btn full" id="depositFrnBtn" disabled>Deposit FRN to Exchange</button>
+    </div>
+    <div class="field">
+      <h4>Deposit Native Coin</h4>
+      
+      <div class="inputrow"><input id="depositNativeAmount" type="number" min="0" step="any" placeholder="Native coin amount"><span>Native coin</span></div>
+      <button class="btn full" id="depositNativeBtn" disabled>Add Native Coin</button>
+    </div>
+    <div class="field">
+      <h4>2. Set Initial Price & Launch</h4>
+      
+      <div class="inputrow"><input id="launchNativeAmount" type="number" min="0" step="any" placeholder="Native coin amount"><span>Native coin</span></div>
+      <button class="btn full" id="setInitialPriceBtn" disabled>Calculate & Set Initial Price</button>
+      <button class="btn full" id="launchBtn" disabled style="margin-top:8px">Launch Exchange & Add Native Coin</button>
+      
+    </div>
+    <div class="admingrid">
+      <button class="btn" id="toggleBuyBtn" disabled>Toggle Buy</button>
+      <button class="btn" id="toggleSellBtn" disabled>Toggle Sell</button>
+      <button class="btn" id="pauseBtn" disabled>Pause / Unpause</button>
+      <button class="btn" id="refreshBtn">Refresh data</button>
+    </div>
+    <div class="field"><label><span>Buy Fee (Basis Points)</span><span>Max 200 = 2%</span></label><div class="inputrow"><input id="adminBuyFee" type="number" min="0" max="200" step="1" value="50"><span>BPS</span></div><button class="btn full" id="setFeeBtn" disabled>Update Buy Fee</button></div>
+    <div class="field"><label><span>Withdraw Reserves</span></label><div class="inputrow"><input id="withdrawFrn" type="number" min="0" step="any" placeholder="FRN amount"><span>FRN</span></div><div class="inputrow" style="margin-top:8px"><input id="withdrawEth" type="number" min="0" step="any" placeholder="Native coin amount"><span>ETH</span></div><div class="inputrow" style="margin-top:8px"><input id="withdrawTo" type="text" placeholder="Recipient address"></div><button class="btn full" id="withdrawBtn" disabled>Withdraw Reserves</button></div>
+    <div class="divider"></div>
+    <h3 class="sectiontitle">Manual USD Exchange Rates</h3>
+    <div class="field"><label><span>Ethereum Sepolia USD per ETH</span></label><div class="inputrow"><input id="usdEthRate" type="number" min="0" step="any" placeholder="USD per ETH"></div></div>
+    <div class="field"><label><span>BNB Smart Chain USD per BNB</span></label><div class="inputrow"><input id="usdBnbRate" type="number" min="0" step="any" placeholder="USD per BNB"></div></div>
+    <button class="btn full" id="saveUsdRatesBtn" type="button">Save USD Rates</button>
+    <div class="muted small">Rates are saved in this browser only.</div>
+    <div id="adminMessage" class="notice hidden"></div>
+    </div>
+  </div>
+</section>
+
+<footer>© 2026 FREON EXCHANGE</footer>
+</div>
+
+
+<!-- Wallet chooser modal: stays open until wallet connection succeeds or user closes it. -->
+<div id="walletModal" class="hidden" style="position:fixed;inset:0;z-index:99999;background:rgba(2,6,18,.82);backdrop-filter:blur(5px);align-items:center;justify-content:center;padding:18px;">
+  <div role="dialog" aria-modal="true" aria-labelledby="walletModalTitle" style="width:min(100%,420px);background:#131b31;border:1px solid #2a3654;border-radius:20px;padding:22px;box-shadow:0 24px 80px #0009;">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px;">
+      <h2 id="walletModalTitle" style="margin:0;font-size:20px;">Connect Wallet</h2>
+      <button id="closeWalletModal" class="btn" type="button" aria-label="Tutup popup" style="padding:7px 11px;">✕</button>
+    </div>
+    
+    <button id="injectedConnectBtn" class="btn full" type="button">Browser Wallet</button>
+    <button id="walletConnectBtn" class="btn full" type="button">WalletConnect</button>
+    <div id="walletModalMessage" class="notice hidden" role="status" aria-live="polite"></div>
+    
+  </div>
+</div>
+
+<script>
+// Load wallet libraries only after the user clicks Connect, so a CDN/import failure
+// cannot prevent the Connect button from receiving its click handler.
+let ethers = null;
+let EthereumProvider = null;
+
+// === CONFIGURATION ===
+// Exchange contract address supplied by user. Token address is read from exchange.frn().
+let TOKEN_ADDRESS = "";
+let EXCHANGE_ADDRESS = "";
+const SEPOLIA_CHAIN_ID = 11155111n;
+const NETWORKS = {
+  "11155111": {name:"Ethereum Sepolia", short:"Sepolia", chainId:11155111n, hex:"0xaa36a7", rpc:"https://ethereum-sepolia-rpc.publicnode.com", explorer:"https://sepolia.etherscan.io", currency:{name:"Sepolia Ether",symbol:"ETH",decimals:18}, exchange:"0x19f48fcC257ab2cC89132E22BA40d26569Da04E5"},
+  "56": {name:"BNB Smart Chain", short:"BNB Mainnet", chainId:56n, hex:"0x38", rpc:"https://bsc-dataseed.binance.org/", explorer:"https://bscscan.com", currency:{name:"BNB",symbol:"BNB",decimals:18}, exchange:"0xC162C99d77514c381b6E9481D27E3BD74Ed53d66"}
+};
+let selectedChainId = "11155111";
+EXCHANGE_ADDRESS = NETWORKS[selectedChainId].exchange;
+const WALLETCONNECT_PROJECT_ID = "d2e7f7a06c478ef4601956b57b6a17c7";
+let walletConnectProvider = null;
+let connectionInProgress = false;
+
+const ERC20_ABI = [
+ "function balanceOf(address) view returns(uint256)",
+ "function allowance(address,address) view returns(uint256)",
+ "function approve(address,uint256) returns(bool)",
+ "function transfer(address,uint256) returns(bool)",
+ "function decimals() view returns(uint8)",
+ "function symbol() view returns(string)"
+];
+const EXCHANGE_ABI = [
+ "function owner() view returns(address)",
+ "function frn() view returns(address)",
+ "function launched() view returns(bool)",
+ "function initialPriceBnbPerFrn() view returns(uint256)",
+ "function setInitialPrice(uint256)",
+ "function launch() payable",
+ "function buyEnabled() view returns(bool)",
+ "function sellEnabled() view returns(bool)",
+ "function paused() view returns(bool)",
+ "function buyFeeBps() view returns(uint256)",
+ "function currentSellFeeBps() view returns(uint256)",
+ "function blacklisted(address) view returns(bool)",
+ "function getReserves() view returns(uint256,uint256)",
+ "function quoteBuy(uint256) view returns(uint256,uint256)",
+ "function quoteSell(uint256) view returns(uint256,uint256,uint256,uint256)",
+ "function buy(uint256 minFrnOut) payable",
+ "function sell(uint256 frnIn,uint256 minBnbOut)",
+ "function setBuyEnabled(bool)",
+ "function setSellEnabled(bool)",
+ "function setPaused(bool)",
+ "function setBuyFeeBps(uint256)",
+ "function withdrawReserves(address,uint256,uint256)",
+ "event SellViolation(address indexed seller,uint256 frnIn,uint256 grossBnb,uint256 bnbReserveBefore)",
+ "event Buy(address indexed buyer,uint256 bnbIn,uint256 frnOut,uint256 feeBnb)",
+ "event Sell(address indexed seller,uint256 frnIn,uint256 bnbOut,uint256 feeBnb,uint256 feeBps)"
+];
+
+let provider, signer, account, token, exchange, tokenDecimals = 18, tokenSymbol = "FRN";
+const SESSION_KEY = "freon_exchange_session_started";
+const SESSION_LIMIT_MS = 6 * 60 * 60 * 1000;
+try { const started=Number(sessionStorage.getItem(SESSION_KEY)||0); if(started && Date.now()-started>SESSION_LIMIT_MS){ sessionStorage.clear(); } } catch {}
+const $ = id => document.getElementById(id);
+const fmt = (v, d=6) => { try { return Number(v).toLocaleString("en-US",{maximumFractionDigits:d}); } catch { return "—"; } };
+const parseToken = v => ethers.parseUnits(String(v), tokenDecimals);
+const parseEth = v => ethers.parseEther(String(v));
+function message(id, text, type="notice") { const el=$(id); el.className="notice "+type; el.textContent=text; el.classList.remove("hidden"); }
+function hideMessage(id){ $(id).classList.add("hidden"); }
+function txLink(hash){ return `${NETWORKS[selectedChainId].explorer}/tx/${hash}`; }
+function ensureConfigured(){ if(!ethers.isAddress(EXCHANGE_ADDRESS)) throw new Error("Invalid exchange contract address."); }
+async function requireSepolia(){
+ const net=await provider.getNetwork();
+ const cfg=NETWORKS[selectedChainId];
+ if(net.chainId!==cfg.chainId){
+   const injected=walletConnectProvider||window.ethereum;
+   if(!injected?.request) throw new Error("Connect your wallet and select "+cfg.name+".");
+   try {
+     await injected.request({method:"wallet_switchEthereumChain",params:[{chainId:cfg.hex}]});
+   } catch(e) {
+     if(e?.code===4902){
+       await injected.request({method:"wallet_addEthereumChain",params:[{
+         chainId:cfg.hex,chainName:cfg.name,nativeCurrency:cfg.currency,
+         rpcUrls:[cfg.rpc],blockExplorerUrls:[cfg.explorer]
+       }]});
+     } else throw new Error("Switch your wallet to "+cfg.name+" to transact.");
+   }
+   if((await provider.getNetwork()).chainId!==cfg.chainId) throw new Error("Wallet has not switched to "+cfg.name+".");
+ }
+}
+function updateNetworkUI(){
+ const cfg=NETWORKS[selectedChainId];
+ $("networkBadge").textContent=cfg.short+" · Chain "+selectedChainId;
+ document.querySelectorAll(".network-btn").forEach(b=>b.classList.toggle("active",b.dataset.chain===selectedChainId));
+ $("networkSwitcher").classList.toggle("visible",!!account);
+}
+async function selectNetwork(chainId){
+ if(!NETWORKS[chainId]) return;
+ selectedChainId=chainId;
+ EXCHANGE_ADDRESS=NETWORKS[chainId].exchange;
+ updateNetworkUI();
+ if(!account){return;}
+ const injected=walletConnectProvider||window.ethereum;
+ if(!injected?.request) return;
+ try{
+   const cfg=NETWORKS[chainId];
+   try{await injected.request({method:"wallet_switchEthereumChain",params:[{chainId:cfg.hex}]});}
+   catch(e){
+     if(e?.code===4902) await injected.request({method:"wallet_addEthereumChain",params:[{chainId:cfg.hex,chainName:cfg.name,nativeCurrency:cfg.currency,rpcUrls:[cfg.rpc],blockExplorerUrls:[cfg.explorer]}]});
+     else throw e;
+   }
+   provider=new ethers.BrowserProvider(injected);
+   signer=await provider.getSigner();
+   account=await signer.getAddress();
+   exchange=new ethers.Contract(EXCHANGE_ADDRESS,EXCHANGE_ABI,signer);
+   TOKEN_ADDRESS=await exchange.frn();
+   if(!ethers.isAddress(TOKEN_ADDRESS)) throw new Error("Invalid token address on this network.");
+   token=new ethers.Contract(TOKEN_ADDRESS,ERC20_ABI,signer);
+   try{tokenDecimals=Number(await token.decimals());tokenSymbol=await token.symbol();}catch{tokenDecimals=18;tokenSymbol="FRN";}
+   updateNetworkUI();
+   $("walletAddress").textContent=account.slice(0,6)+"…"+account.slice(-4);
+   await refresh();
+ }catch(e){message("tradeMessage",e?.shortMessage||e?.message||"Failed to switch network.","error");}
+}
+document.querySelectorAll(".network-btn").forEach(btn=>btn.addEventListener("click",()=>selectNetwork(btn.dataset.chain)));
+async function loadEthers(){
+ if (ethers) return;
+ try {
+   const mod = await import("https://cdn.jsdelivr.net/npm/ethers@6.13.5/+esm");
+   ethers = mod.ethers || mod;
+ } catch (e) {
+   throw new Error("Failed to load Ethers.js from the CDN. Check your internet connection or CDN blocking. Details: " + (e?.message || e));
+ }
+}
+async function connect(mode="walletconnect"){
+ await loadEthers();
+ let eip1193 = null;
+ if (mode === "injected") {
+   eip1193 = window.ethereum;
+   if (!eip1193) throw new Error("This browser has no wallet provider. Choose WalletConnect.");
+   await eip1193.request({method:"eth_requestAccounts"});
+ } else {
+   if (!WALLETCONNECT_PROJECT_ID || WALLETCONNECT_PROJECT_ID === "YOUR_PROJECT_ID") throw new Error("WalletConnect Project ID is not configured.");
+   try {
+     if (!EthereumProvider) {
+       const mod = await import("https://cdn.jsdelivr.net/npm/@walletconnect/ethereum-provider@2.17.0/+esm");
+       EthereumProvider = mod.default || mod.EthereumProvider || mod;
+     }
+     // Always start a fresh WalletConnect connection so users can choose a different wallet.
+     // Tear down any prior provider/session instead of silently reusing it.
+     if (walletConnectProvider) {
+       try { await walletConnectProvider.disconnect(); } catch {}
+       walletConnectProvider = null;
+     }
+     const wc = await EthereumProvider.init({
+       projectId: WALLETCONNECT_PROJECT_ID,
+       chains: [Number(SEPOLIA_CHAIN_ID), 56],
+       showQrModal: true,
+       metadata: {name:"FREON EXCHANGE",description:"FRN exchange interface",url:location.origin,icons:[]}
+     });
+     if (wc.connected || wc.session) { try { await wc.disconnect(); } catch {} }
+     walletConnectProvider = wc;
+     await wc.connect();
+     eip1193 = wc;
+   } catch (e) {
+     throw new Error("WalletConnect failed. Check the Project ID, allowed domains, and internet connection. Details: " + (e?.message || e));
+   }
+ }
+ try { if(!sessionStorage.getItem(SESSION_KEY)) sessionStorage.setItem(SESSION_KEY,String(Date.now())); } catch {}
+ provider = new ethers.BrowserProvider(eip1193);
+ signer=await provider.getSigner(); account=await signer.getAddress();
+ await requireSepolia(); ensureConfigured();
+ exchange=new ethers.Contract(EXCHANGE_ADDRESS,EXCHANGE_ABI,signer);
+ TOKEN_ADDRESS = await exchange.frn();
+ if (!ethers.isAddress(TOKEN_ADDRESS)) throw new Error("The exchange returned an invalid FRN token address.");
+ token=new ethers.Contract(TOKEN_ADDRESS,ERC20_ABI,signer);
+ try { tokenDecimals=Number(await token.decimals()); tokenSymbol=await token.symbol(); } catch {}
+ $("walletAddress").textContent=account.slice(0,6)+"…"+account.slice(-4);
+ $("connectBtn").textContent="Connected · Disconnect"; updateNetworkUI();
+ $("walletModal").style.display="none"; $("walletModal").classList.add("hidden");
+ await refresh();
+ const activeProvider=eip1193;
+ if(activeProvider?.on){
+   activeProvider.on("accountsChanged",async()=>{try{provider=new ethers.BrowserProvider(activeProvider);signer=await provider.getSigner();account=await signer.getAddress();exchange=new ethers.Contract(EXCHANGE_ADDRESS,EXCHANGE_ABI,signer);TOKEN_ADDRESS=await exchange.frn();token=new ethers.Contract(TOKEN_ADDRESS,ERC20_ABI,signer);updateNetworkUI();await refresh();}catch(e){message("tradeMessage",e?.message||"Wallet changed.","error");}});
+   activeProvider.on("chainChanged",async(chainHex)=>{const id=BigInt(chainHex).toString();if(NETWORKS[id]){selectedChainId=id;EXCHANGE_ADDRESS=NETWORKS[id].exchange;try{provider=new ethers.BrowserProvider(activeProvider);signer=await provider.getSigner();account=await signer.getAddress();exchange=new ethers.Contract(EXCHANGE_ADDRESS,EXCHANGE_ABI,signer);TOKEN_ADDRESS=await exchange.frn();token=new ethers.Contract(TOKEN_ADDRESS,ERC20_ABI,signer);try{tokenDecimals=Number(await token.decimals());tokenSymbol=await token.symbol();}catch{}updateNetworkUI();await refresh();}catch(e){message("tradeMessage",e?.message||"Failed to load network.","error");}}});
+ }
+}
+
+let currentNativePrice=0, reversePrice=false, chartWindow=1;
+function nativeTicker(){return selectedChainId==="56"?"BNB":"ETH";}
+function updatePriceDisplay(){
+ const n=nativeTicker(), p=currentNativePrice;
+ $("price").textContent=!p?"— "+(reversePrice?"FRN / "+n:n+" / FRN"):(reversePrice?fmt(1/p,8)+" FRN / "+n:fmt(p,12)+" "+n+" / FRN");
+ $("priceForward").textContent=n+" / FRN"; $("priceReverse").textContent="FRN / "+n;
+ document.querySelectorAll(".inputrow span").forEach(el=>{if(el.textContent.trim()==="ETH"||el.textContent.trim()==="BNB")el.textContent=n;});
+ const bq=$("buyFeeQuote"),sq=$("sellQuote"),sf=$("sellFeeQuote"); if(bq&&bq.textContent.includes("ETH"))bq.textContent=bq.textContent.replaceAll("ETH",n); if(sq&&sq.textContent.includes("ETH"))sq.textContent=sq.textContent.replaceAll("ETH",n); if(sf&&sf.textContent.includes("ETH"))sf.textContent=sf.textContent.replaceAll("ETH",n);
+ $("priceForward").classList.toggle("active",!reversePrice); $("priceReverse").classList.toggle("active",reversePrice);
+}
+function recordPricePoint(price){
+ if(!price||!isFinite(price))return;
+ try{const key="frn_price_"+selectedChainId;let a=JSON.parse(localStorage.getItem(key)||"[]");const now=Date.now();if(!a.length||now-a[a.length-1].t>30000)a.push({t:now,p:price});a=a.filter(x=>x.t>now-86400000);localStorage.setItem(key,JSON.stringify(a));drawPriceChart();}catch(e){}
+}
+function drawPriceChart(){
+ const c=$("priceChart");if(!c)return;const ctx=c.getContext("2d"),w=c.clientWidth||600,h=190,dpr=window.devicePixelRatio||1;c.width=w*dpr;c.height=h*dpr;ctx.scale(dpr,dpr);ctx.clearRect(0,0,w,h);
+ let a=[];try{a=JSON.parse(localStorage.getItem("frn_price_"+selectedChainId)||"[]")}catch(e){}
+ const cut=Date.now()-chartWindow*3600000;a=a.filter(x=>x.t>=cut);
+ if(a.length<2){ctx.fillStyle="#9aa9c7";ctx.font="13px sans-serif";ctx.fillText("Collecting price history…",12,28);$("chartNote").textContent="Price history is collected while this page is open.";return;}
+ const vals=a.map(x=>x.p),min=Math.min(...vals),max=Math.max(...vals),span=max-min||max*.01||1;ctx.strokeStyle="#2a3654";ctx.lineWidth=1;for(let i=1;i<4;i++){ctx.beginPath();ctx.moveTo(0,h*i/4);ctx.lineTo(w,h*i/4);ctx.stroke();}
+ ctx.strokeStyle="#42e0a0";ctx.lineWidth=2;ctx.beginPath();a.forEach((x,i)=>{let px=i*w/(a.length-1),py=h-12-(x.p-min)/span*(h-24);i?ctx.lineTo(px,py):ctx.moveTo(px,py)});ctx.stroke();
+ $("chartNote").textContent="Observed "+a.length+" price points · "+(chartWindow===1?"1 hour":"24 hours")+" · "+nativeTicker()+" / FRN";
+}
+const USD_RATE_KEY = "freon_exchange_manual_usd_rates_v1";
+function getUsdRates(){
+ try { return JSON.parse(localStorage.getItem(USD_RATE_KEY) || "{}") || {}; } catch { return {}; }
+}
+function updateUsdPriceDisplay(){
+ const rates=getUsdRates();
+ const rate=Number(rates[selectedChainId]||0);
+ const native=nativeTicker();
+ $("usdNativeDisplay").textContent="USD / "+native+": "+(rate>0?"$"+fmt(rate,2):"Not set");
+ const usdPrice=currentNativePrice>0&&rate>0?currentNativePrice*rate:0;
+ $("usdFrnPrice").textContent=usdPrice>0?"$"+fmt(usdPrice,10):"—";
+ const ethInput=$("usdEthRate"),bnbInput=$("usdBnbRate");
+ if(ethInput && document.activeElement!==ethInput) ethInput.value=rates["11155111"]??"";
+ if(bnbInput && document.activeElement!==bnbInput) bnbInput.value=rates["56"]??"";
+}
+$("saveUsdRatesBtn").addEventListener("click",()=>{
+ const eth=Number($("usdEthRate").value),bnb=Number($("usdBnbRate").value);
+ if(!Number.isFinite(eth)||eth<0||!Number.isFinite(bnb)||bnb<0){message("adminMessage","Enter valid non-negative USD rates for both networks.","error");return;}
+ const rates={"11155111":eth,"56":bnb};
+ try{localStorage.setItem(USD_RATE_KEY,JSON.stringify(rates));updateUsdPriceDisplay();message("adminMessage","USD rates saved in this browser.","success");}
+ catch(e){message("adminMessage","Unable to save USD rates in this browser.","error");}
+});
+
+async function refresh(){
+ if(!provider || !account) return;
+ await requireSepolia(); ensureConfigured();
+ const readEx=exchange;
+ const [feeBuy,feeSell,paused,launched,buyOn,sellOn,blocked,ethWallet,owner] = await Promise.all([
+ readEx.buyFeeBps(), readEx.currentSellFeeBps(), readEx.paused(),readEx.launched(),readEx.buyEnabled(),readEx.sellEnabled(),readEx.blacklisted(account),provider.getBalance(account),readEx.owner()
+ ]);
+ const reserves=await readEx.getReserves();
+ const fr=Number(ethers.formatUnits(reserves[0],tokenDecimals));
+ const er=Number(ethers.formatEther(reserves[1]));
+ currentNativePrice=fr>0?er/fr:0;
+ updatePriceDisplay();
+ updateUsdPriceDisplay();
+ recordPricePoint(currentNativePrice);
+ $("buyFee").textContent=fmt(Number(feeBuy)/100,2)+"%";
+ $("sellFee").textContent=fmt(Number(feeSell)/100,2)+"%";
+ $("walletFrn").textContent=fmt(Number(ethers.formatUnits(await token.balanceOf(account),tokenDecimals)));
+ $("walletEth").textContent=fmt(Number(ethers.formatEther(ethWallet)),8);
+ $("availableEth").textContent=fmt(Number(ethers.formatEther(ethWallet)),6);
+ $("availableFrn").textContent=fmt(Number(ethers.formatUnits(await token.balanceOf(account),tokenDecimals)));
+ $("exchangeStatus").textContent=paused?"PAUSED":(launched?"LIVE":"NOT LAUNCHED");
+ $("buyStatus").textContent=buyOn?"ON":"OFF"; $("sellStatus").textContent=sellOn?"ON":"OFF";
+ $("blacklistStatus").textContent=blocked?"BLACKLISTED":"NORMAL";
+ $("toggleBuyBtn").textContent=buyOn?"Disable Buy":"Enable Buy";
+ $("toggleSellBtn").textContent=sellOn?"Disable Sell":"Enable Sell";
+ $("pauseBtn").textContent=paused?"Unpause":"Pause";
+ const isOwner=owner.toLowerCase()===account.toLowerCase();
+ $("adminPanel").classList.toggle("hidden",!isOwner);
+ for(const id of ["toggleBuyBtn","toggleSellBtn","pauseBtn","setFeeBtn","withdrawBtn","depositFrnBtn","depositNativeBtn"]) $(id).disabled=!isOwner;
+ const isLaunched=Boolean(launched);
+ $("setInitialPriceBtn").disabled=!isOwner||isLaunched;
+ $("launchBtn").disabled=!isOwner||isLaunched;
+ $("buyBtn").disabled=paused||!launched||!buyOn||blocked;
+ $("sellBtn").disabled=paused||!launched||!sellOn||blocked;
+ const tokenLink=$("tokenAddressLink"), exchangeLink=$("exchangeAddressLink");
+ if(tokenLink){tokenLink.textContent=TOKEN_ADDRESS;tokenLink.href=NETWORKS[selectedChainId].explorer+"/token/"+TOKEN_ADDRESS;}
+ if(exchangeLink){exchangeLink.textContent=EXCHANGE_ADDRESS;exchangeLink.href=NETWORKS[selectedChainId].explorer+"/address/"+EXCHANGE_ADDRESS;}
+ $("setupNotice").classList.add("hidden");
+ await updateQuotes();
+}
+async function updateQuotes(){
+ if(!exchange) return;
+ try{
+  const v=$("buyAmount").value;
+  if(v && Number(v)>0){
+   const q=await exchange.quoteBuy(parseEth(v));
+   $("buyQuote").textContent=fmt(Number(ethers.formatUnits(q[0],tokenDecimals)));
+   $("buyFeeQuote").textContent=fmt(Number(ethers.formatEther(q[1])),8)+" "+nativeTicker();
+  } else {$("buyQuote").textContent="—";$("buyFeeQuote").textContent="—";}
+  const s=$("sellAmount").value;
+  if(s && Number(s)>0){
+   const q=await exchange.quoteSell(parseToken(s));
+   $("sellQuote").textContent=fmt(Number(ethers.formatEther(q[1])),8)+" "+nativeTicker();
+   $("sellFeeQuote").textContent=fmt(Number(q[3])/100,2)+"% ("+fmt(Number(ethers.formatEther(q[2])),8)+" ETH)";
+  } else {$("sellQuote").textContent="—";$("sellFeeQuote").textContent="—";}
+ }catch(e){$("buyQuote").textContent="—";$("sellQuote").textContent="—";}
+}
+async function runTx(promise,label,where="tradeMessage"){
+ try{
+  if(!signer || !account) throw new Error("Connect your wallet first.");
+  await requireSepolia();
+  message(where,"Waiting for wallet confirmation…");
+  const tx=await promise;
+  message(where,`${label}: transaction submitted. Hash: ${tx.hash}`,"notice");
+  const lastTxEl=$("lastTx"); if(lastTxEl) lastTxEl.innerHTML=`${label}: <a target="_blank" rel="noopener" href="${txLink(tx.hash)}">${tx.hash.slice(0,12)}…${tx.hash.slice(-8)}</a>`;
+  const receipt=await tx.wait();
+  let violation=false;
+  if(exchange && receipt){
+   for(const log of receipt.logs){
+    try { const parsed=exchange.interface.parseLog(log); if(parsed?.name==="SellViolation") violation=true; } catch {}
+   }
+  }
+  if(violation){
+   message(where,`SELL VIOLATION DETECTED. Transaction ${tx.hash} triggered exchange rules; native coin was not paid and the wallet was permanently blacklisted on FREON EXCHANGE.`,"error");
+   const lastTxEl=$("lastTx"); if(lastTxEl) lastTxEl.innerHTML=`<b>SELL VIOLATION</b> · <a target="_blank" rel="noopener" href="${txLink(tx.hash)}">${tx.hash}</a>`;
+  } else {
+   message(where,`${label} confirmed. Hash: ${tx.hash}`,"success");
+  }
+  await refresh();
+ }catch(e){ message(where,e?.shortMessage||e?.reason||e?.message||"Transaction failed.","error"); }
+}
+$("connectBtn").addEventListener("click",async()=>{
+ if(connectionInProgress) return;
+ if(account){
+   try { if(walletConnectProvider?.disconnect) await walletConnectProvider.disconnect(); } catch {}
+   account=null;signer=null;provider=null;exchange=null;token=null;walletConnectProvider=null;
+   $("walletAddress").textContent="Not connected";$("connectBtn").textContent="Connect Wallet";
+   $("networkSwitcher").classList.remove("visible");$("adminPanel").classList.add("hidden");
+   ["buyBtn","sellBtn","toggleBuyBtn","toggleSellBtn","pauseBtn","setFeeBtn","withdrawBtn","depositFrnBtn","depositNativeBtn","setInitialPriceBtn","launchBtn"].forEach(id=>$(id).disabled=true);
+   return;
+ }
+ const modal=$("walletModal");
+ if(!modal){ message("setupNotice","Wallet connection dialog was not found.","error"); return; }
+ modal.classList.remove("hidden"); modal.style.display="flex";
+});
+$("closeWalletModal").addEventListener("click",()=>{ $("walletModal").style.display="none"; $("walletModal").classList.add("hidden"); });
+$("walletModal").addEventListener("click",e=>{if(e.target===$("walletModal")){ $("walletModal").style.display="none"; $("walletModal").classList.add("hidden"); }});
+async function doConnect(mode, buttonId){
+ // Ignore extra taps while a wallet request is already in progress.
+ if (connectionInProgress) return;
+ connectionInProgress = true;
+ closeWalletChoice();
+ const btn=$(buttonId), old=btn.textContent;
+ [$("injectedConnectBtn"),$("walletConnectBtn"),$("connectBtn")].forEach(b=>{if(b)b.disabled=true;});
+ btn.textContent="Connecting…"; hideMessage("setupNotice"); hideMessage("walletModalMessage");
+ try { await connect(mode); }
+ catch(e){
+   const err=e?.shortMessage||e?.reason||e?.message||"Wallet connection failed.";
+   message("setupNotice",err,"error");
+ }
+ finally {
+   connectionInProgress = false;
+   btn.textContent=old;
+   [$("injectedConnectBtn"),$("walletConnectBtn")].forEach(b=>{if(b)b.disabled=false;});
+   if ($("connectBtn")) $("connectBtn").disabled=false;
+ }
+}
+function closeWalletChoice(){ const modal=$("walletModal"); if(modal){ modal.style.display="none"; modal.classList.add("hidden"); } }
+$("injectedConnectBtn").addEventListener("click",()=>doConnect("injected","injectedConnectBtn"));
+$("walletConnectBtn").addEventListener("click",()=>doConnect("walletconnect","walletConnectBtn"));
+
+$("buyTab").addEventListener("click",()=>{$("buyTab").classList.add("active");$("sellTab").classList.remove("active");$("buyPanel").classList.remove("hidden");$("sellPanel").classList.add("hidden");});
+$("sellTab").addEventListener("click",()=>{$("sellTab").classList.add("active");$("buyTab").classList.remove("active");$("sellPanel").classList.remove("hidden");$("buyPanel").classList.add("hidden");});
+$("buyAmount").addEventListener("input",updateQuotes); $("sellAmount").addEventListener("input",updateQuotes);
+$("buyBtn").addEventListener("click",async()=>{
+ try{
+   if(!signer||!exchange||!provider||!account) throw new Error("Connect your wallet first.");
+   await requireSepolia();
+   const amount=$("buyAmount").value;
+   if(!amount||!Number.isFinite(Number(amount))||Number(amount)<=0) throw new Error("Enter a valid native coin amount.");
+   const value=parseEth(amount);
+   const balance=await provider.getBalance(account);
+   if(balance<value) throw new Error("Insufficient native coin balance for this purchase.");
+   const [isPaused,isLaunched,isBuyEnabled,isBlocked]=await Promise.all([
+     exchange.paused(),exchange.launched(),exchange.buyEnabled(),exchange.blacklisted(account)
+   ]);
+   if(isPaused) throw new Error("Exchange is paused. The owner must unpause it first.");
+   if(!isLaunched) throw new Error("Exchange has not been launched by the owner.");
+   if(!isBuyEnabled) throw new Error("Buy is disabled. The owner must enable Buy.");
+   if(isBlocked) throw new Error("This wallet is blacklisted and cannot Buy.");
+   const q=await exchange.quoteBuy(value);
+   if(!q||q[0]<=0n) throw new Error("Invalid Buy quote or insufficient reserves.");
+   const min=q[0]*9950n/10000n;
+   // Simulasi transaksi lebih dahulu agar alasan revert dari smart contract ditampilkan sebelum wallet diminta konfirmasi.
+   try { await exchange.buy.staticCall(min,{value}); }
+   catch(simErr) {
+     throw new Error("Contract rejected Buy: "+(simErr?.shortMessage||simErr?.reason||simErr?.revert?.name||simErr?.message||"simulasi gagal")+". Check reserves, launch status, Buy status, and contract rules.");
+   }
+   const gas=await exchange.buy.estimateGas(min,{value});
+   const gasLimit=gas*120n/100n;
+   const feeData=await provider.getFeeData();
+   if(feeData.maxFeePerGas && balance < value + gasLimit*feeData.maxFeePerGas)
+     throw new Error("Native coin balance covers the purchase but not gas.");
+   const tx=await exchange.buy(min,{value,gasLimit});
+   await runTx(Promise.resolve(tx),"Buy FRN");
+ }catch(e){
+   message("tradeMessage",e?.shortMessage||e?.reason||e?.message||"Buy transaction failed.","error");
+ }
+});
+$("sellBtn").addEventListener("click",async()=>{
+ const btn=$("sellBtn"), oldText=btn.textContent;
+ btn.disabled=true; btn.textContent="Processing Sell…";
+ try{
+   if(!signer||!token||!exchange||!provider||!account) throw new Error("Connect your wallet first.");
+   await requireSepolia();
+   const amount=$("sellAmount").value;
+   if(!amount||!Number.isFinite(Number(amount))||Number(amount)<=0) throw new Error("Enter a valid FRN amount.");
+   const amountWei=parseToken(amount);
+   const [balance,isPaused,isLaunched,isSellEnabled,isBlocked]=await Promise.all([
+     token.balanceOf(account),exchange.paused(),exchange.launched(),exchange.sellEnabled(),exchange.blacklisted(account)
+   ]);
+   if(amountWei>balance) throw new Error("Insufficient FRN balance.");
+   if(isPaused) throw new Error("Exchange is paused. The owner must unpause it first.");
+   if(!isLaunched) throw new Error("Exchange has not been launched by the owner.");
+   if(!isSellEnabled) throw new Error("Sell is disabled. The owner must enable Sell.");
+   if(isBlocked) throw new Error("This wallet is blacklisted and cannot Sell.");
+
+   let allowance=await token.allowance(account,EXCHANGE_ADDRESS);
+   if(allowance<amountWei){
+     message("tradeMessage","Please wait — confirm FRN approval in your wallet. The Sell confirmation will open automatically after approval is confirmed.");
+     const approveTx=await token.approve(EXCHANGE_ADDRESS,amountWei);
+     const lastTxEl=$("lastTx");
+     if(lastTxEl) lastTxEl.innerHTML=`FRN approval submitted: <a target="_blank" rel="noopener" href="${txLink(approveTx.hash)}">${approveTx.hash}</a>`;
+     message("tradeMessage","Please wait — FRN approval is processing. Sell will continue automatically after confirmation.");
+     await approveTx.wait();
+     message("tradeMessage","Approval confirmed. Please wait while the Sell confirmation opens in your wallet…");
+     allowance=await token.allowance(account,EXCHANGE_ADDRESS);
+     if(allowance<amountWei) throw new Error("Approval is insufficient. Please retry Sell.");
+   }
+
+   const q=await exchange.quoteSell(amountWei);
+   if(!q||q[1]<=0n) throw new Error("Invalid Sell quote or insufficient reserves.");
+   const min=q[1]*9950n/10000n;
+   message("tradeMessage","Checking Sell transaction…");
+   try { await exchange.sell.staticCall(amountWei,min); }
+   catch(simErr) {
+     throw new Error("Contract rejected Sell: "+(simErr?.shortMessage||simErr?.reason||simErr?.revert?.name||simErr?.message||"simulasi gagal")+". Check reserves, exchange status, Sell status, and contract rules.");
+   }
+   const gas=await exchange.sell.estimateGas(amountWei,min);
+   message("tradeMessage","Please wait — opening the Sell confirmation in your wallet…");
+   const tx=await exchange.sell(amountWei,min,{gasLimit:gas*120n/100n});
+   await runTx(Promise.resolve(tx),"Sell FRN");
+ }catch(e){
+   message("tradeMessage",e?.shortMessage||e?.reason||e?.message||"Sell transaction failed.","error");
+ }finally{
+   btn.textContent=oldText;
+   if(provider&&account){ try{await refresh();}catch{} }
+ }
+});
+$("depositFrnBtn").addEventListener("click",async()=>{
+ try{
+  if(!signer||!token||!exchange) throw new Error("Connect the owner wallet first.");
+  const amount=$("depositFrnAmount").value;
+  if(!amount||!Number.isFinite(Number(amount))||Number(amount)<=0) throw new Error("Enter a valid FRN amount.");
+  const wei=parseToken(amount);
+  const bal=await token.balanceOf(account);
+  if(wei>bal) throw new Error("Insufficient FRN wallet balance.");
+  await runTx(token.transfer(EXCHANGE_ADDRESS,wei),"Deposit FRN","adminMessage");
+ }catch(e){message("adminMessage",e?.shortMessage||e?.reason||e?.message||"Deposit FRN gagal.","error");}
+});
+$("depositNativeBtn").addEventListener("click",async()=>{
+ try{
+  if(!signer) throw new Error("Connect the owner wallet first.");
+  const amount=$("depositNativeAmount").value;
+  if(!amount||!Number.isFinite(Number(amount))||Number(amount)<=0) throw new Error("Enter a valid native coin amount.");
+  const value=parseEth(amount);
+  const balance=await provider.getBalance(account);
+  if(value>balance) throw new Error("Insufficient native coin balance for amount and gas.");
+  await runTx(signer.sendTransaction({to:EXCHANGE_ADDRESS,value}),"Add native coin","adminMessage");
+ }catch(e){message("adminMessage",e?.shortMessage||e?.reason||e?.message||"Failed to add native coin.","error");}
+});
+$("setInitialPriceBtn").addEventListener("click",async()=>{
+ try{
+  if(!signer||!exchange) throw new Error("Connect the owner wallet first.");
+  if(await exchange.launched()) throw new Error("Exchange is already launched; initial price is locked.");
+  const nativeAmount=$("launchNativeAmount").value;
+  if(!nativeAmount||!Number.isFinite(Number(nativeAmount))||Number(nativeAmount)<=0) throw new Error("Enter the native coin amount for launch.");
+  const reserves=await exchange.getReserves();
+  const frnReserve=reserves[0];
+  if(frnReserve<=0n) throw new Error("FRN reserves are zero. Deposit FRN first.");
+  const nativeWei=parseEth(nativeAmount);
+  const priceScaled=(nativeWei*10n**18n)/frnReserve;
+  if(priceScaled<=0n) throw new Error("Calculated price is zero. Check the amount and token decimals.");
+  await runTx(exchange.setInitialPrice(priceScaled),"Set initial price","adminMessage");
+ }catch(e){message("adminMessage",e?.shortMessage||e?.reason||e?.message||"Failed to set initial price.","error");}
+});
+$("launchBtn").addEventListener("click",async()=>{
+ try{
+  if(!signer||!exchange) throw new Error("Connect the owner wallet first.");
+  if(await exchange.launched()) throw new Error("Exchange is already launched.");
+  const nativeAmount=$("launchNativeAmount").value;
+  if(!nativeAmount||!Number.isFinite(Number(nativeAmount))||Number(nativeAmount)<=0) throw new Error("Enter the native coin amount for launch.");
+  const reserves=await exchange.getReserves();
+  if(reserves[0]<=0n) throw new Error("FRN reserves are zero.");
+  const configuredPrice=await exchange.initialPriceBnbPerFrn();
+  const expectedPrice=(parseEth(nativeAmount)*10n**18n)/reserves[0];
+  if(configuredPrice!==expectedPrice) throw new Error("Initial price does not match current FRN reserves and native coin amount. Click Calculate & Set Initial Price again.");
+  await runTx(exchange.launch({value:parseEth(nativeAmount)}),"Launch exchange","adminMessage");
+ }catch(e){message("adminMessage",e?.shortMessage||e?.reason||e?.message||"Launch failed.","error");}
+});
+$("toggleBuyBtn").addEventListener("click",()=>runTx(exchange.setBuyEnabled(!(($("toggleBuyBtn").textContent).includes("Disable"))),"Update Buy status","adminMessage"));
+$("toggleSellBtn").addEventListener("click",()=>runTx(exchange.setSellEnabled(!(($("toggleSellBtn").textContent).includes("Disable"))),"Update Sell status","adminMessage"));
+$("pauseBtn").addEventListener("click",()=>runTx(exchange.setPaused($("pauseBtn").textContent==="Pause"),"Update pause status","adminMessage"));
+$("setFeeBtn").addEventListener("click",()=>{const v=Number($("adminBuyFee").value);if(!Number.isInteger(v)||v<0||v>200){message("adminMessage","Buy fee must be between 0 and 200 basis points.","error");return;}runTx(exchange.setBuyFeeBps(v),"Update Buy fee","adminMessage");});
+$("withdrawBtn").addEventListener("click",async()=>{
+ try{
+  const to=$("withdrawTo").value.trim();if(!ethers.isAddress(to))throw new Error("Enter a valid recipient address.");
+  const f=$("withdrawFrn").value||"0",e=$("withdrawEth").value||"0";
+  await runTx(exchange.withdrawReserves(to,parseToken(f),parseEth(e)),"Withdraw reserves","adminMessage");
+ }catch(e){message("adminMessage",e.message,"error");}
+});
+$("refreshBtn").addEventListener("click",()=>refresh().catch(e=>message("adminMessage",e.message,"error")));
+updateUsdPriceDisplay();
+if(window.ethereum){
+ window.ethereum.on?.("accountsChanged",()=>{});
+ window.ethereum.on?.("chainChanged",()=>{});
+}
+$("priceForward").addEventListener("click",()=>{reversePrice=false;updatePriceDisplay()});
+$("priceReverse").addEventListener("click",()=>{reversePrice=true;updatePriceDisplay()});
+$("chart1h").addEventListener("click",()=>{chartWindow=1;$("chart1h").classList.add("active");$("chart24h").classList.remove("active");drawPriceChart()});
+$("chart24h").addEventListener("click",()=>{chartWindow=24;$("chart24h").classList.add("active");$("chart1h").classList.remove("active");drawPriceChart()});
+window.addEventListener("resize",drawPriceChart);
+
+</script>
+</body>
+</html>

@@ -1,0 +1,625 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FREON EXCHANGE | Sepolia</title>
+<style>
+:root{--bg:#0b1020;--panel:#131b31;--panel2:#192440;--text:#eef3ff;--muted:#9aa9c7;--line:#2a3654;--green:#42e0a0;--red:#ff6e7b;--blue:#7ca7ff;--gold:#ffc96b}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 20% 0%,#17264a 0,#0b1020 42%);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--text)}
+.wrap{max-width:1120px;margin:auto;padding:24px 16px 60px}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:28px}
+.brand{display:flex;gap:12px;align-items:center}.logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#7ca7ff,#6a5cff);display:grid;place-items:center;font-weight:900;color:#071020;box-shadow:0 8px 28px #586bff55}.brand h1{font-size:20px;margin:0;letter-spacing:.08em}.brand p{margin:4px 0 0;color:var(--muted);font-size:12px}
+button,input{font:inherit}.btn{border:1px solid var(--line);border-radius:12px;padding:12px 15px;background:var(--panel2);color:var(--text);font-weight:700;cursor:pointer}.btn.primary{background:linear-gradient(135deg,#7ca7ff,#9b8cff);border:0;color:#081124}.btn:disabled{opacity:.45;cursor:not-allowed}.network{font-size:12px;color:var(--gold);border:1px solid #70592c;background:#382c1a;padding:8px 10px;border-radius:999px}
+.hero{display:grid;grid-template-columns:1.4fr .8fr;gap:18px;margin-bottom:18px}.card{background:linear-gradient(180deg,#151e35,#11182b);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:0 18px 60px #0002}.eyebrow{font-size:11px;color:var(--blue);letter-spacing:.15em;text-transform:uppercase;font-weight:800}.price{font-size:clamp(28px,5vw,46px);font-weight:850;margin:10px 0 4px;letter-spacing:-.04em}.muted{color:var(--muted)}.small{font-size:12px;line-height:1.6}.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.stat{padding:15px;background:#0e1527;border:1px solid var(--line);border-radius:14px}.stat label{display:block;font-size:12px;color:var(--muted);margin-bottom:8px}.stat strong{font-size:18px;word-break:break-word}
+.layout{display:grid;grid-template-columns:1fr 1fr;gap:18px}.chartwrap{height:220px;margin-top:14px}.chartwrap canvas{width:100%;height:100%;display:block}.charttabs{display:flex;gap:8px;flex-wrap:wrap}.charttabs .btn{padding:8px 12px}.ratevalue{font-size:22px;font-weight:850;margin:8px 0}.tabs{display:flex;background:#0b1222;padding:4px;border-radius:13px;margin-bottom:18px}.tabs button{flex:1;border:0;background:transparent;color:var(--muted);padding:10px;border-radius:10px;cursor:pointer;font-weight:800}.tabs button.active{background:#263657;color:#fff}
+.field{margin:14px 0}.field label{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:8px}.inputrow{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:#0a1120;border-radius:12px;padding:0 12px}.inputrow input{width:100%;background:transparent;border:0;outline:0;color:#fff;padding:15px 0;min-width:0}.inputrow span{font-size:12px;color:var(--muted);font-weight:800}.quote{background:#0c1425;border:1px solid var(--line);padding:13px;border-radius:12px;margin:14px 0;font-size:13px}.quote div{display:flex;justify-content:space-between;gap:12px;margin:7px 0}.quote strong{word-break:break-all;text-align:right}.full{width:100%;margin-top:8px}.notice{padding:13px 14px;border-radius:12px;margin:14px 0;font-size:13px;line-height:1.55;border:1px solid #4a5e83;background:#172643;color:#dce8ff}.notice.warn{border-color:#765d2d;background:#332818;color:#ffe3ad}.notice.error{border-color:#773947;background:#351b29;color:#ffc3cb}.notice.success{border-color:#276b53;background:#102c26;color:#aaf6d8}.sectiontitle{margin:0 0 16px;font-size:17px}.divider{height:1px;background:var(--line);margin:18px 0}.hidden{display:none !important}
+#setupNotice{display:none !important}.admingrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.admingrid .btn{width:100%}footer{color:var(--muted);font-size:12px;line-height:1.7;margin-top:22px;text-align:center}a{color:#9bb9ff}
+@media(max-width:760px){.hero,.layout{grid-template-columns:1fr}.wrap{padding:16px 12px 40px}.card{padding:18px}.top{align-items:flex-start}.stats{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <div class="brand"><div class="logo">F</div><div><h1>FREON EXCHANGE</h1><p>On-chain FRN exchange · Sepolia testnet</p></div></div>
+  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><span class="network" id="networkBadge">Sepolia · Chain 11155111</span><button class="btn primary" id="connectBtn">Connect Wallet</button></div>
+</header>
+
+<div class="notice warn" id="setupNotice"><b>Setup diperlukan:</b> hubungkan wallet ke Ethereum Sepolia. Tombol Connect Wallet akan membuka pilihan browser wallet atau WalletConnect. Alamat token FRN dibaca dari fungsi frn() pada kontrak. Jangan gunakan dana sungguhan; ini testnet.</div>
+
+<section class="hero">
+  <div class="card">
+    <div class="eyebrow">Current reserve price · indicative</div>
+    <div class="price" id="price">— ETH / FRN</div>
+    <div class="ratevalue" id="usdPrice">— USD / FRN</div>
+    <div class="muted small" id="ethUsdLabel">Kurs admin ETH/USD: belum diatur</div>
+    <div class="muted small">Harga indikatif dihitung dari cadangan ETH ÷ cadangan FRN. Harga eksekusi mengikuti kurva kontrak dan dapat berubah sebelum transaksi masuk blockchain.</div>
+    <div class="divider"></div>
+    <div class="stats">
+      <div class="stat"><label>FRN Reserve</label><strong id="frnReserve">—</strong></div>
+      <div class="stat"><label>ETH Reserve</label><strong id="ethReserve">—</strong></div>
+      <div class="stat"><label>Buy Fee</label><strong id="buyFee">—</strong></div>
+      <div class="stat"><label>Sell Fee (dynamic)</label><strong id="sellFee">—</strong></div>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="sectiontitle">Grafik Harga FRN</h2>
+    <div class="charttabs"><button class="btn" id="chart1hBtn">1 Jam</button><button class="btn" id="chart24hBtn">24 Jam</button></div>
+    <div class="muted small" id="chartCaption">Riwayat harga lokal dari snapshot halaman ini.</div>
+    <div class="chartwrap"><canvas id="priceChart" aria-label="Grafik riwayat harga FRN"></canvas></div>
+    <div class="muted small" id="historyNote">Riwayat akan terkumpul saat halaman dibuka.</div>
+  </div>
+  <div class="card">
+    <div class="eyebrow">Wallet</div>
+    <div style="font-size:18px;font-weight:800;margin:10px 0" id="walletAddress">Not connected</div>
+    <div class="muted small">Wallet harus terhubung ke jaringan Ethereum Sepolia. Gunakan hanya token dan ETH Sepolia untuk pengujian.</div>
+    <div class="divider"></div>
+    <div class="stats">
+      <div class="stat"><label>Wallet FRN</label><strong id="walletFrn">—</strong></div>
+      <div class="stat"><label>Wallet ETH</label><strong id="walletEth">—</strong></div>
+    </div>
+  </div>
+</section>
+
+<section class="layout">
+  <div class="card">
+    <h2 class="sectiontitle">Trade FRN</h2>
+    <div class="tabs"><button id="buyTab" class="active">Buy FRN</button><button id="sellTab">Sell FRN</button></div>
+    <div id="buyPanel">
+      <div class="field"><label><span>Pay with</span><span>Available ETH: <b id="availableEth">—</b></span></label><div class="inputrow"><input id="buyAmount" type="number" min="0" step="any" placeholder="0.0"><span>ETH</span></div></div>
+      <div class="quote"><div><span>Estimated FRN out</span><strong id="buyQuote">—</strong></div><div><span>Buy fee</span><strong id="buyFeeQuote">—</strong></div></div>
+      <button class="btn primary full" id="buyBtn" disabled>Buy FRN</button>
+    </div>
+    <div id="sellPanel" class="hidden">
+      <div class="field"><label><span>Sell amount</span><span>Available FRN: <b id="availableFrn">—</b></span></label><div class="inputrow"><input id="sellAmount" type="number" min="0" step="any" placeholder="0.0"><span>FRN</span></div></div>
+      <div class="quote"><div><span>Estimated ETH out</span><strong id="sellQuote">—</strong></div><div><span>Estimated sell fee</span><strong id="sellFeeQuote">—</strong></div></div>
+      <button class="btn primary full" id="sellBtn" disabled>Approve & Sell FRN</button>
+      <div class="small muted" style="margin-top:10px">Peraturan exchange berlaku sesuai whitepaper/ketentuan proyek. Jika kontrak mengeluarkan event pelanggaran, website menampilkan status transaksi tersebut.</div>
+    </div>
+    <div id="tradeMessage" class="notice hidden"></div>
+  </div>
+
+  <div class="card">
+    <h2 class="sectiontitle">Status & Informasi</h2>
+    <div class="stats">
+      <div class="stat"><label>Exchange status</label><strong id="exchangeStatus">—</strong></div>
+      <div class="stat"><label>Buy status</label><strong id="buyStatus">—</strong></div>
+      <div class="stat"><label>Sell status</label><strong id="sellStatus">—</strong></div>
+      <div class="stat"><label>Wallet status</label><strong id="blacklistStatus">—</strong></div>
+    </div>
+    <div class="notice" id="lastTx">Transaksi terbaru akan ditampilkan di sini.</div>
+    <div id="adminPanel" class="hidden">
+    <h3 class="sectiontitle">Admin panel</h3>
+    <p class="muted small">Panel ini hanya ditampilkan ketika wallet yang terhubung adalah owner kontrak.</p>
+    <div class="field">
+      <h4>1. Tambah cadangan FRN</h4>
+      <p class="muted small">Mengirim FRN dari wallet owner langsung ke alamat kontrak exchange.</p>
+      <div class="inputrow"><input id="depositFrnAmount" type="number" min="0" step="any" placeholder="Jumlah FRN"><span>FRN</span></div>
+      <button class="btn full" id="depositFrnBtn" disabled>Deposit FRN ke Exchange</button>
+    </div>
+    <div class="field">
+      <h4>Tambah native coin ke cadangan</h4>
+      <p class="muted small">Bisa digunakan untuk menambah saldo native coin kontrak setelah launch. Pastikan jaringan wallet sesuai.</p>
+      <div class="inputrow"><input id="depositNativeAmount" type="number" min="0" step="any" placeholder="Jumlah native coin"><span>ETH / native</span></div>
+      <button class="btn full" id="depositNativeBtn" disabled>Tambah Native Coin</button>
+    </div>
+    <div class="field">
+      <h4>2. Atur harga awal & Launch</h4>
+      <p class="muted small">Masukkan jumlah native coin yang akan dikirim saat launch. Harga awal dihitung dari seluruh cadangan FRN yang sudah ada di kontrak. Pastikan jaringan dan satuan benar.</p>
+      <div class="inputrow"><input id="launchNativeAmount" type="number" min="0" step="any" placeholder="Native coin untuk launch"><span>ETH / native</span></div>
+      <button class="btn full" id="setInitialPriceBtn" disabled>Hitung & Set Harga Awal</button>
+      <button class="btn full" id="launchBtn" disabled style="margin-top:8px">Launch Exchange & Tambah Native Coin</button>
+      <p class="muted small">Launch hanya bisa berhasil sekali. Jangan tekan sebelum jumlah FRN dan native coin sudah final.</p>
+    </div>
+    <div class="admingrid">
+      <button class="btn" id="toggleBuyBtn" disabled>Toggle Buy</button>
+      <button class="btn" id="toggleSellBtn" disabled>Toggle Sell</button>
+      <button class="btn" id="pauseBtn" disabled>Pause Exchange</button>
+      <button class="btn" id="unpauseBtn" disabled>Resume / Unpause</button>
+      <button class="btn" id="refreshBtn">Refresh data</button>
+    </div>
+    <div class="field">
+      <h4>Kurs ETH/USD (diatur admin)</h4>
+      <p class="muted small">Masukkan kurs ETH dalam USD untuk menghitung harga FRN dalam USD. Kurs ini hanya tersimpan di browser ini; agar semua pengunjung melihat kurs yang sama, perlu backend atau perubahan kontrak.</p>
+      <div class="inputrow"><input id="adminEthUsd" type="number" min="0" step="any" placeholder="Contoh: 2500"><span>USD / ETH</span></div>
+      <button class="btn full" id="saveEthUsdBtn" disabled>Simpan Kurs ETH/USD</button>
+    </div>
+    <div class="field"><label><span>Buy fee (basis points)</span><span>Max 200 = 2%</span></label><div class="inputrow"><input id="adminBuyFee" type="number" min="0" max="200" step="1" value="50"><span>BPS</span></div><button class="btn full" id="setFeeBtn" disabled>Update Buy Fee</button></div>
+    <div class="field"><label><span>Withdraw after pausing</span></label><div class="inputrow"><input id="withdrawFrn" type="number" min="0" step="any" placeholder="FRN amount"><span>FRN</span></div><div class="inputrow" style="margin-top:8px"><input id="withdrawEth" type="number" min="0" step="any" placeholder="ETH amount"><span>ETH</span></div><div class="inputrow" style="margin-top:8px"><input id="withdrawTo" type="text" placeholder="Recipient address"></div><button class="btn full" id="withdrawBtn" disabled>Withdraw Reserves</button></div>
+    <div id="adminMessage" class="notice hidden"></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  FREON EXCHANGE Sepolia UI · Testnet only · Not audited.<br>
+  Kontrak harus diuji dan diaudit sebelum digunakan dengan aset bernilai. Harga tampilan bersifat indikatif dan bukan jaminan eksekusi.<br>
+  Token FRN: <code id="tokenAddressText"></code> · Exchange contract: <code id="exchangeAddressText"></code>
+</footer>
+</div>
+
+
+<!-- Wallet chooser modal: stays open until wallet connection succeeds or user closes it. -->
+<div id="walletModal" class="hidden" style="position:fixed;inset:0;z-index:99999;background:rgba(2,6,18,.82);backdrop-filter:blur(5px);align-items:center;justify-content:center;padding:18px;">
+  <div role="dialog" aria-modal="true" aria-labelledby="walletModalTitle" style="width:min(100%,420px);background:#131b31;border:1px solid #2a3654;border-radius:20px;padding:22px;box-shadow:0 24px 80px #0009;">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px;">
+      <h2 id="walletModalTitle" style="margin:0;font-size:20px;">Connect Wallet</h2>
+      <button id="closeWalletModal" class="btn" type="button" aria-label="Tutup popup" style="padding:7px 11px;">✕</button>
+    </div>
+    <p class="muted small" style="margin:0 0 16px;">Pilih cara untuk menghubungkan wallet ke FREON EXCHANGE.</p>
+    <button id="injectedConnectBtn" class="btn full" type="button">Browser Wallet · MetaMask</button>
+    <button id="walletConnectBtn" class="btn full" type="button">WalletConnect · Wallet eksternal / QR</button>
+    <div id="walletModalMessage" class="notice hidden" role="status" aria-live="polite"></div>
+    <p class="muted small" style="margin:12px 0 0;">Jika popup QR muncul, selesaikan koneksi di wallet. Popup ini tidak akan ditutup sebelum koneksi berhasil.</p>
+  </div>
+</div>
+
+<script>
+// Load wallet libraries only after the user clicks Connect, so a CDN/import failure
+// cannot prevent the Connect button from receiving its click handler.
+let ethers = null;
+let EthereumProvider = null;
+
+// === CONFIGURATION ===
+// Exchange contract address supplied by user. Token address is read from exchange.frn().
+let TOKEN_ADDRESS = "";
+const EXCHANGE_ADDRESS = "0x19f48fcC257ab2cC89132E22BA40d26569Da04E5";
+const SEPOLIA_CHAIN_ID = 11155111n;
+const WALLETCONNECT_PROJECT_ID = "d2e7f7a06c478ef4601956b57b6a17c7";
+let walletConnectProvider = null;
+
+const ERC20_ABI = [
+ "function balanceOf(address) view returns(uint256)",
+ "function allowance(address,address) view returns(uint256)",
+ "function approve(address,uint256) returns(bool)",
+ "function transfer(address,uint256) returns(bool)",
+ "function decimals() view returns(uint8)",
+ "function symbol() view returns(string)"
+];
+const EXCHANGE_ABI = [
+ "function owner() view returns(address)",
+ "function frn() view returns(address)",
+ "function launched() view returns(bool)",
+ "function initialPriceBnbPerFrn() view returns(uint256)",
+ "function setInitialPrice(uint256)",
+ "function launch() payable",
+ "function buyEnabled() view returns(bool)",
+ "function sellEnabled() view returns(bool)",
+ "function paused() view returns(bool)",
+ "function buyFeeBps() view returns(uint256)",
+ "function currentSellFeeBps() view returns(uint256)",
+ "function blacklisted(address) view returns(bool)",
+ "function getReserves() view returns(uint256,uint256)",
+ "function quoteBuy(uint256) view returns(uint256,uint256)",
+ "function quoteSell(uint256) view returns(uint256,uint256,uint256,uint256)",
+ "function buy(uint256 minFrnOut) payable",
+ "function sell(uint256 frnIn,uint256 minBnbOut)",
+ "function setBuyEnabled(bool)",
+ "function setSellEnabled(bool)",
+ "function setPaused(bool)",
+ "function setBuyFeeBps(uint256)",
+ "function withdrawReserves(address,uint256,uint256)",
+ "event SellViolation(address indexed seller,uint256 frnIn,uint256 grossBnb,uint256 bnbReserveBefore)",
+ "event Buy(address indexed buyer,uint256 bnbIn,uint256 frnOut,uint256 feeBnb)",
+ "event Sell(address indexed seller,uint256 frnIn,uint256 bnbOut,uint256 feeBnb,uint256 feeBps)"
+];
+
+let provider, signer, account, token, exchange, tokenDecimals = 18, tokenSymbol = "FRN";
+const SESSION_KEY = "freon_exchange_session_started";
+const SESSION_LIMIT_MS = 6 * 60 * 60 * 1000;
+try { const started=Number(sessionStorage.getItem(SESSION_KEY)||0); if(started && Date.now()-started>SESSION_LIMIT_MS){ sessionStorage.clear(); } } catch {}
+const $ = id => document.getElementById(id);
+const fmt = (v, d=6) => { try { return Number(v).toLocaleString("en-US",{maximumFractionDigits:d}); } catch { return "—"; } };
+const parseToken = v => ethers.parseUnits(String(v), tokenDecimals);
+const parseEth = v => ethers.parseEther(String(v));
+function message(id, text, type="notice") { const el=$(id); el.className="notice "+type; el.textContent=text; el.classList.remove("hidden"); }
+function hideMessage(id){ $(id).classList.add("hidden"); }
+function txLink(hash){ return `https://sepolia.etherscan.io/tx/${hash}`; }
+function ensureConfigured(){ if(!ethers.isAddress(EXCHANGE_ADDRESS)) throw new Error("Alamat kontrak exchange tidak valid."); }
+async function requireSepolia(){
+ const net=await provider.getNetwork();
+ if(net.chainId!==SEPOLIA_CHAIN_ID){
+  const injected=walletConnectProvider||window.ethereum;
+  if(!injected?.request) throw new Error("Pindahkan wallet ke Ethereum Sepolia (Chain ID 11155111).");
+  try {
+   await injected.request({method:"wallet_switchEthereumChain",params:[{chainId:"0xaa36a7"}]});
+  } catch(e) {
+   if(e?.code===4902){
+    await injected.request({method:"wallet_addEthereumChain",params:[{
+     chainId:"0xaa36a7",chainName:"Ethereum Sepolia",
+     nativeCurrency:{name:"Sepolia Ether",symbol:"ETH",decimals:18},
+     rpcUrls:["https://ethereum-sepolia-rpc.publicnode.com"],
+     blockExplorerUrls:["https://sepolia.etherscan.io"]
+    }]});
+   } else throw new Error("Ganti jaringan wallet ke Ethereum Sepolia (Chain ID 11155111) untuk melakukan transaksi.");
+  }
+  if((await provider.getNetwork()).chainId!==SEPOLIA_CHAIN_ID) throw new Error("Wallet belum berpindah ke Ethereum Sepolia (Chain ID 11155111).");
+ }
+}
+async function loadEthers(){
+ if (ethers) return;
+ try {
+   const mod = await import("https://cdn.jsdelivr.net/npm/ethers@6.13.5/+esm");
+   ethers = mod.ethers || mod;
+ } catch (e) {
+   throw new Error("Ethers.js tidak berhasil dimuat dari CDN. Periksa koneksi internet atau pemblokiran CDN. Detail: " + (e?.message || e));
+ }
+}
+async function connect(mode="walletconnect"){
+ await loadEthers();
+ let eip1193 = null;
+ if (mode === "injected") {
+   eip1193 = window.ethereum;
+   if (!eip1193) throw new Error("Browser ini tidak menyediakan wallet provider. Pilih WalletConnect.");
+   await eip1193.request({method:"eth_requestAccounts"});
+ } else {
+   if (!WALLETCONNECT_PROJECT_ID || WALLETCONNECT_PROJECT_ID === "YOUR_PROJECT_ID") throw new Error("WalletConnect Project ID belum dikonfigurasi.");
+   try {
+     if (!EthereumProvider) {
+       const mod = await import("https://cdn.jsdelivr.net/npm/@walletconnect/ethereum-provider@2.17.0/+esm");
+       EthereumProvider = mod.default || mod.EthereumProvider || mod;
+     }
+     const wc = await EthereumProvider.init({
+       projectId: WALLETCONNECT_PROJECT_ID,
+       chains: [Number(SEPOLIA_CHAIN_ID)],
+       showQrModal: true,
+       metadata: {name:"FREON EXCHANGE",description:"FRN exchange testnet interface",url:"https://exchange.xeon-s.my.id",icons:[]}
+     });
+     walletConnectProvider = wc;
+     await wc.connect();
+     eip1193 = wc;
+   } catch (e) {
+     throw new Error("WalletConnect gagal dibuka. Periksa Project ID, Allowed Domains pada Reown Dashboard, dan koneksi internet. Detail: " + (e?.message || e));
+   }
+ }
+ try { if(!sessionStorage.getItem(SESSION_KEY)) sessionStorage.setItem(SESSION_KEY,String(Date.now())); } catch {}
+ provider = new ethers.BrowserProvider(eip1193);
+ signer=await provider.getSigner(); account=await signer.getAddress();
+ await requireSepolia(); ensureConfigured();
+ exchange=new ethers.Contract(EXCHANGE_ADDRESS,EXCHANGE_ABI,signer);
+ TOKEN_ADDRESS = await exchange.frn();
+ if (!ethers.isAddress(TOKEN_ADDRESS)) throw new Error("Kontrak exchange mengembalikan alamat token FRN yang tidak valid.");
+ token=new ethers.Contract(TOKEN_ADDRESS,ERC20_ABI,signer);
+ try { tokenDecimals=Number(await token.decimals()); tokenSymbol=await token.symbol(); } catch {}
+ $("walletAddress").textContent=account.slice(0,6)+"…"+account.slice(-4);
+ $("connectBtn").textContent="Connected · Disconnect";
+ $("walletModal").style.display="none"; $("walletModal").classList.add("hidden");
+ await refresh();
+ const activeProvider=eip1193;
+ if(activeProvider?.on){
+   activeProvider.on("accountsChanged",()=>location.reload());
+   activeProvider.on("chainChanged",()=>location.reload());
+ }
+}
+
+const HISTORY_KEY="freon_frn_price_history_v1";
+const ETHUSD_KEY="freon_admin_eth_usd_v1";
+let chartRangeMs=60*60*1000;
+function getHistory(){try{return JSON.parse(localStorage.getItem(HISTORY_KEY)||"[]").filter(x=>Number.isFinite(x.t)&&Number.isFinite(x.p)&&x.p>0)}catch{return []}}
+function savePriceSnapshot(priceEth){
+ if(!(priceEth>0))return;
+ const now=Date.now(); let h=getHistory();
+ if(!h.length || now-h[h.length-1].t>=60000) h.push({t:now,p:priceEth});
+ else h[h.length-1]={t:now,p:priceEth};
+ h=h.filter(x=>x.t>=now-7*24*60*60*1000).slice(-10080);
+ try{localStorage.setItem(HISTORY_KEY,JSON.stringify(h))}catch{}
+ drawPriceChart();
+}
+function getEthUsd(){const n=Number(localStorage.getItem(ETHUSD_KEY));return Number.isFinite(n)&&n>0?n:0}
+function updateUsdPrice(priceEth){
+ const rate=getEthUsd();
+ $("ethUsdLabel").textContent=rate>0?`Kurs admin ETH/USD: $${fmt(rate,2)} per ETH`:"Kurs admin ETH/USD: belum diatur";
+ $("usdPrice").textContent=rate>0&&priceEth>0?`$${fmt(priceEth*rate,12)} USD / FRN`:"Atur kurs ETH/USD untuk melihat harga USD";
+}
+function drawPriceChart(){
+ const canvas=$("priceChart");if(!canvas)return;
+ const rect=canvas.getBoundingClientRect();if(!rect.width||!rect.height)return;
+ const dpr=window.devicePixelRatio||1;canvas.width=Math.round(rect.width*dpr);canvas.height=Math.round(rect.height*dpr);
+ const ctx=canvas.getContext("2d");ctx.setTransform(dpr,0,0,dpr,0,0);
+ const w=rect.width,h=rect.height;ctx.clearRect(0,0,w,h);
+ const now=Date.now(), points=getHistory().filter(x=>x.t>=now-chartRangeMs&&x.t<=now);
+ const pad={l:12,r:12,t:14,b:25}, cw=w-pad.l-pad.r,ch=h-pad.t-pad.b;
+ ctx.font="11px system-ui";ctx.fillStyle="#9aa9c7";ctx.strokeStyle="#2a3654";ctx.lineWidth=1;
+ for(let i=0;i<4;i++){let y=pad.t+ch*i/3;ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(w-pad.r,y);ctx.stroke()}
+ if(!points.length){ctx.fillStyle="#9aa9c7";ctx.textAlign="center";ctx.fillText("Belum ada data untuk rentang ini",w/2,h/2);$("historyNote").textContent="Buka halaman secara berkala agar snapshot harga terkumpul. Data ini tersimpan di browser perangkat ini.";return}
+ const vals=points.map(x=>x.p),min=Math.min(...vals),max=Math.max(...vals),span=max-min||Math.max(max*0.01,1e-12);
+ ctx.strokeStyle="#42e0a0";ctx.lineWidth=2;ctx.beginPath();points.forEach((p,i)=>{const x=pad.l+(points.length===1?0:(p.t-points[0].t)/Math.max(1,points[points.length-1].t-points[0].t))*cw;const y=pad.t+ch-(p.p-min)/span*ch;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)});ctx.stroke();
+ ctx.fillStyle="#9aa9c7";ctx.textAlign="left";ctx.fillText(fmt(max,10)+" ETH",pad.l,pad.t+9);ctx.fillText(fmt(min,10)+" ETH",pad.l,h-8);
+ const first=new Date(points[0].t),last=new Date(points[points.length-1].t);ctx.textAlign="left";ctx.fillText(first.toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"}),pad.l,h-8);ctx.textAlign="right";ctx.fillText(last.toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"}),w-pad.r,h-8);
+ $("historyNote").textContent=`${points.length} snapshot · terakhir ${last.toLocaleString("id-ID")}. Riwayat hanya dari browser ini, bukan data global on-chain.`;
+}
+$("chart1hBtn").addEventListener("click",()=>{chartRangeMs=60*60*1000;$("chartCaption").textContent="Riwayat harga 1 jam terakhir (ETH per FRN).";drawPriceChart()});
+$("chart24hBtn").addEventListener("click",()=>{chartRangeMs=24*60*60*1000;$("chartCaption").textContent="Riwayat harga 24 jam terakhir (ETH per FRN).";drawPriceChart()});
+$("saveEthUsdBtn").addEventListener("click",()=>{const rate=Number($("adminEthUsd").value);if(!Number.isFinite(rate)||rate<=0){message("adminMessage","Masukkan kurs ETH/USD lebih besar dari 0.","error");return}try{localStorage.setItem(ETHUSD_KEY,String(rate))}catch{}updateUsdPrice(Number($("price").dataset.eth||0));message("adminMessage",`Kurs ETH/USD disimpan di browser ini: $${fmt(rate,2)} per ETH.`,"success")});
+window.addEventListener("resize",drawPriceChart);
+async function refresh(){
+ if(!provider || !account) return;
+ await requireSepolia(); ensureConfigured();
+ const readEx=exchange;
+ const [feeBuy,feeSell,paused,launched,buyOn,sellOn,blocked,ethWallet,owner] = await Promise.all([
+ readEx.buyFeeBps(), readEx.currentSellFeeBps(), readEx.paused(),readEx.launched(),readEx.buyEnabled(),readEx.sellEnabled(),readEx.blacklisted(account),provider.getBalance(account),readEx.owner()
+ ]);
+ const reserves=await readEx.getReserves();
+ const fr=Number(ethers.formatUnits(reserves[0],tokenDecimals));
+ const er=Number(ethers.formatEther(reserves[1]));
+ $("frnReserve").textContent=fmt(fr); $("ethReserve").textContent=fmt(er,8);
+ const priceEth=fr>0?er/fr:0;
+ $("price").textContent=(priceEth>0?fmt(priceEth,12):"—")+" ETH / FRN";
+ $("price").dataset.eth=String(priceEth); updateUsdPrice(priceEth); savePriceSnapshot(priceEth);
+ $("buyFee").textContent=fmt(Number(feeBuy)/100,2)+"%";
+ $("sellFee").textContent=fmt(Number(feeSell)/100,2)+"%";
+ $("walletFrn").textContent=fmt(Number(ethers.formatUnits(await token.balanceOf(account),tokenDecimals)));
+ $("walletEth").textContent=fmt(Number(ethers.formatEther(ethWallet)),8);
+ $("availableEth").textContent=fmt(Number(ethers.formatEther(ethWallet)),6);
+ $("availableFrn").textContent=fmt(Number(ethers.formatUnits(await token.balanceOf(account),tokenDecimals)));
+ $("exchangeStatus").textContent=paused?"PAUSED":(launched?"LIVE":"NOT LAUNCHED");
+ $("buyStatus").textContent=buyOn?"ON":"OFF"; $("sellStatus").textContent=sellOn?"ON":"OFF";
+ $("blacklistStatus").textContent=blocked?"BLACKLISTED":"NORMAL";
+ $("toggleBuyBtn").textContent=buyOn?"Disable Buy":"Enable Buy";
+ $("toggleSellBtn").textContent=sellOn?"Disable Sell":"Enable Sell";
+ const isOwner=owner.toLowerCase()===account.toLowerCase();
+ $("pauseBtn").textContent=paused?"Exchange Sudah Pause":"Pause Exchange";
+ $("unpauseBtn").textContent=paused?"Resume / Unpause":"Exchange Sedang Aktif";
+ $("pauseBtn").disabled=!isOwner || paused;
+ $("unpauseBtn").disabled=!isOwner || !paused;
+ $("adminPanel").classList.toggle("hidden",!isOwner);
+ for(const id of ["toggleBuyBtn","toggleSellBtn","pauseBtn","unpauseBtn","setFeeBtn","withdrawBtn","depositFrnBtn","depositNativeBtn","saveEthUsdBtn"]) $(id).disabled=!isOwner;
+ if(isOwner && !$("adminEthUsd").value && getEthUsd()>0) $("adminEthUsd").value=String(getEthUsd());
+ const isLaunched=Boolean(launched);
+ $("setInitialPriceBtn").disabled=!isOwner||isLaunched;
+ $("launchBtn").disabled=!isOwner||isLaunched;
+ $("buyBtn").disabled=paused||!launched||!buyOn||blocked;
+ $("sellBtn").disabled=paused||!launched||!sellOn||blocked;
+ $("tokenAddressText").textContent=TOKEN_ADDRESS; $("exchangeAddressText").textContent=EXCHANGE_ADDRESS;
+ $("setupNotice").classList.add("hidden");
+ await updateQuotes();
+}
+async function updateQuotes(){
+ if(!exchange) return;
+ try{
+  const v=$("buyAmount").value;
+  if(v && Number(v)>0){
+   const q=await exchange.quoteBuy(parseEth(v));
+   $("buyQuote").textContent=fmt(Number(ethers.formatUnits(q[0],tokenDecimals)));
+   $("buyFeeQuote").textContent=fmt(Number(ethers.formatEther(q[1])),8)+" ETH";
+  } else {$("buyQuote").textContent="—";$("buyFeeQuote").textContent="—";}
+  const s=$("sellAmount").value;
+  if(s && Number(s)>0){
+   const q=await exchange.quoteSell(parseToken(s));
+   $("sellQuote").textContent=fmt(Number(ethers.formatEther(q[1])),8)+" ETH";
+   $("sellFeeQuote").textContent=fmt(Number(q[3])/100,2)+"% ("+fmt(Number(ethers.formatEther(q[2])),8)+" ETH)";
+  } else {$("sellQuote").textContent="—";$("sellFeeQuote").textContent="—";}
+ }catch(e){$("buyQuote").textContent="—";$("sellQuote").textContent="—";}
+}
+async function runTx(promise,label,where="tradeMessage"){
+ try{
+  if(!signer || !account) throw new Error("Hubungkan wallet terlebih dahulu.");
+  await requireSepolia();
+  message(where,"Menunggu konfirmasi wallet…");
+  const tx=await promise;
+  message(where,`${label}: transaksi dikirim. Hash: ${tx.hash}`,"notice");
+  $("lastTx").innerHTML=`${label}: <a target="_blank" rel="noopener" href="${txLink(tx.hash)}">${tx.hash.slice(0,12)}…${tx.hash.slice(-8)}</a>`;
+  const receipt=await tx.wait();
+  let violation=false;
+  if(exchange && receipt){
+   for(const log of receipt.logs){
+    try { const parsed=exchange.interface.parseLog(log); if(parsed?.name==="SellViolation") violation=true; } catch {}
+   }
+  }
+  if(violation){
+   message(where,`PELANGGARAN TERDETEKSI. Transaksi ${tx.hash} memicu aturan exchange; ETH tidak dibayarkan dan wallet masuk blacklist permanen di FREON EXCHANGE.`,"error");
+   $("lastTx").innerHTML=`<b>SELL VIOLATION</b> · <a target="_blank" rel="noopener" href="${txLink(tx.hash)}">${tx.hash}</a>`;
+  } else {
+   message(where,`${label} berhasil dikonfirmasi. Hash: ${tx.hash}`,"success");
+  }
+  await refresh();
+ }catch(e){ message(where,e?.shortMessage||e?.reason||e?.message||"Transaksi gagal.","error"); }
+}
+$("connectBtn").addEventListener("click",async()=>{
+ if(account){
+   try { if(walletConnectProvider?.disconnect) await walletConnectProvider.disconnect(); } catch {}
+   location.reload(); return;
+ }
+ const modal=$("walletModal");
+ if(!modal){ message("setupNotice","Popup wallet tidak ditemukan pada HTML. Unggah file index.html versi fixed.","error"); return; }
+ modal.classList.remove("hidden"); modal.style.display="flex";
+});
+$("closeWalletModal").addEventListener("click",()=>{ $("walletModal").style.display="none"; $("walletModal").classList.add("hidden"); });
+$("walletModal").addEventListener("click",e=>{if(e.target===$("walletModal")){ $("walletModal").style.display="none"; $("walletModal").classList.add("hidden"); }});
+async function doConnect(mode, buttonId){
+ const btn=$(buttonId), old=btn.textContent; btn.disabled=true; btn.textContent="Connecting…"; hideMessage("setupNotice"); hideMessage("walletModalMessage");
+ try { await connect(mode); }
+ catch(e){
+   const err=e?.shortMessage||e?.reason||e?.message||"Wallet gagal terhubung.";
+   message("walletModalMessage",err,"error");
+   message("setupNotice",err,"error");
+ }
+ finally { btn.disabled=false; btn.textContent=old; }
+}
+function closeWalletChoice(){ const modal=$("walletModal"); if(modal){ modal.style.display="none"; modal.classList.add("hidden"); } }
+$("injectedConnectBtn").addEventListener("click",()=>{ closeWalletChoice(); doConnect("injected","injectedConnectBtn"); });
+$("walletConnectBtn").addEventListener("click",()=>{ closeWalletChoice(); doConnect("walletconnect","walletConnectBtn"); });
+
+$("buyTab").addEventListener("click",()=>{$("buyTab").classList.add("active");$("sellTab").classList.remove("active");$("buyPanel").classList.remove("hidden");$("sellPanel").classList.add("hidden");});
+$("sellTab").addEventListener("click",()=>{$("sellTab").classList.add("active");$("buyTab").classList.remove("active");$("sellPanel").classList.remove("hidden");$("buyPanel").classList.add("hidden");});
+$("buyAmount").addEventListener("input",updateQuotes); $("sellAmount").addEventListener("input",updateQuotes);
+$("buyBtn").addEventListener("click",async()=>{
+ try{
+   if(!signer||!exchange||!provider||!account) throw new Error("Hubungkan wallet terlebih dahulu.");
+   await requireSepolia();
+   const amount=$("buyAmount").value;
+   if(!amount||!Number.isFinite(Number(amount))||Number(amount)<=0) throw new Error("Masukkan jumlah ETH yang valid.");
+   const value=parseEth(amount);
+   const balance=await provider.getBalance(account);
+   if(balance<value) throw new Error("Saldo ETH Sepolia tidak cukup untuk jumlah pembelian.");
+   const [isPaused,isLaunched,isBuyEnabled,isBlocked]=await Promise.all([
+     exchange.paused(),exchange.launched(),exchange.buyEnabled(),exchange.blacklisted(account)
+   ]);
+   if(isPaused) throw new Error("Exchange sedang PAUSED. Owner harus melakukan Unpause terlebih dahulu.");
+   if(!isLaunched) throw new Error("Exchange belum di-launch oleh owner.");
+   if(!isBuyEnabled) throw new Error("Fitur Buy sedang OFF. Owner harus mengaktifkan Toggle Buy.");
+   if(isBlocked) throw new Error("Wallet ini masuk blacklist kontrak dan tidak dapat melakukan Buy.");
+   const q=await exchange.quoteBuy(value);
+   if(!q||q[0]<=0n) throw new Error("Quote Buy FRN tidak valid atau cadangan tidak mencukupi.");
+   const min=q[0]*9500n/10000n; // toleransi slippage 5% untuk menghindari revert SLIPPAGE_OR_ZERO
+   // Simulasi transaksi lebih dahulu agar alasan revert dari smart contract ditampilkan sebelum wallet diminta konfirmasi.
+   try { await exchange.buy.staticCall(min,{value}); }
+   catch(simErr) {
+     throw new Error("Kontrak menolak Buy: "+(simErr?.shortMessage||simErr?.reason||simErr?.revert?.name||simErr?.message||"simulasi gagal")+". Periksa saldo cadangan, status launch, Buy ON, dan aturan kontrak.");
+   }
+   const gas=await exchange.buy.estimateGas(min,{value});
+   const gasLimit=gas*120n/100n;
+   const feeData=await provider.getFeeData();
+   if(feeData.maxFeePerGas && balance < value + gasLimit*feeData.maxFeePerGas)
+     throw new Error("Saldo ETH cukup untuk nilai Buy tetapi tidak cukup untuk biaya gas.");
+   const tx=await exchange.buy(min,{value,gasLimit});
+   await runTx(Promise.resolve(tx),"Buy FRN");
+ }catch(e){
+   message("tradeMessage",e?.shortMessage||e?.reason||e?.message||"Transaksi Buy gagal.","error");
+ }
+});
+$("sellBtn").addEventListener("click",async()=>{
+ const btn=$("sellBtn"), oldText=btn.textContent;
+ btn.disabled=true; btn.textContent="Processing Sell…";
+ try{
+   if(!signer||!token||!exchange||!provider||!account) throw new Error("Hubungkan wallet terlebih dahulu.");
+   await requireSepolia();
+   const amount=$("sellAmount").value;
+   if(!amount||!Number.isFinite(Number(amount))||Number(amount)<=0) throw new Error("Masukkan jumlah FRN yang valid.");
+   const amountWei=parseToken(amount);
+   const [balance,isPaused,isLaunched,isSellEnabled,isBlocked]=await Promise.all([
+     token.balanceOf(account),exchange.paused(),exchange.launched(),exchange.sellEnabled(),exchange.blacklisted(account)
+   ]);
+   if(amountWei>balance) throw new Error("Saldo FRN tidak mencukupi.");
+   if(isPaused) throw new Error("Exchange sedang PAUSED. Owner harus melakukan Unpause terlebih dahulu.");
+   if(!isLaunched) throw new Error("Exchange belum di-launch oleh owner.");
+   if(!isSellEnabled) throw new Error("Fitur Sell sedang OFF. Owner harus mengaktifkan Toggle Sell.");
+   if(isBlocked) throw new Error("Wallet ini masuk blacklist kontrak dan tidak dapat melakukan Sell.");
+
+   let allowance=await token.allowance(account,EXCHANGE_ADDRESS);
+   if(allowance<amountWei){
+     message("tradeMessage","Konfirmasi Approve FRN di wallet terlebih dahulu…");
+     const approveTx=await token.approve(EXCHANGE_ADDRESS,amountWei);
+     $("lastTx").innerHTML=`Approve FRN dikirim: <a target="_blank" rel="noopener" href="${txLink(approveTx.hash)}">${approveTx.hash}</a>`;
+     await approveTx.wait();
+     allowance=await token.allowance(account,EXCHANGE_ADDRESS);
+     if(allowance<amountWei) throw new Error("Approval belum cukup. Coba ulangi Sell.");
+   }
+
+   const q=await exchange.quoteSell(amountWei);
+   if(!q||q[1]<=0n) throw new Error("Quote Sell tidak valid atau cadangan ETH tidak mencukupi.");
+   const min=q[1]*9950n/10000n;
+   message("tradeMessage","Memeriksa transaksi Sell…");
+   try { await exchange.sell.staticCall(amountWei,min); }
+   catch(simErr) {
+     throw new Error("Kontrak menolak Sell: "+(simErr?.shortMessage||simErr?.reason||simErr?.revert?.name||simErr?.message||"simulasi gagal")+". Periksa saldo cadangan, status exchange, Sell ON, dan aturan kontrak.");
+   }
+   const gas=await exchange.sell.estimateGas(amountWei,min);
+   const tx=await exchange.sell(amountWei,min,{gasLimit:gas*120n/100n});
+   await runTx(Promise.resolve(tx),"Sell FRN");
+ }catch(e){
+   message("tradeMessage",e?.shortMessage||e?.reason||e?.message||"Transaksi Sell gagal.","error");
+ }finally{
+   btn.textContent=oldText;
+   if(provider&&account){ try{await refresh();}catch{} }
+ }
+});
+$("depositFrnBtn").addEventListener("click",async()=>{
+ try{
+  if(!signer||!token||!exchange) throw new Error("Hubungkan wallet owner terlebih dahulu.");
+  const amount=$("depositFrnAmount").value;
+  if(!amount||!Number.isFinite(Number(amount))||Number(amount)<=0) throw new Error("Masukkan jumlah FRN yang valid.");
+  const wei=parseToken(amount);
+  const bal=await token.balanceOf(account);
+  if(wei>bal) throw new Error("Saldo FRN wallet tidak mencukupi.");
+  await runTx(token.transfer(EXCHANGE_ADDRESS,wei),"Deposit FRN","adminMessage");
+ }catch(e){message("adminMessage",e?.shortMessage||e?.reason||e?.message||"Deposit FRN gagal.","error");}
+});
+$("depositNativeBtn").addEventListener("click",async()=>{
+ try{
+  if(!signer) throw new Error("Hubungkan wallet owner terlebih dahulu.");
+  const amount=$("depositNativeAmount").value;
+  if(!amount||!Number.isFinite(Number(amount))||Number(amount)<=0) throw new Error("Masukkan jumlah native coin yang valid.");
+  const value=parseEth(amount);
+  const balance=await provider.getBalance(account);
+  if(value>balance) throw new Error("Saldo native coin wallet tidak mencukupi untuk jumlah tersebut dan gas.");
+  await runTx(signer.sendTransaction({to:EXCHANGE_ADDRESS,value}),"Tambah native coin","adminMessage");
+ }catch(e){message("adminMessage",e?.shortMessage||e?.reason||e?.message||"Gagal menambah native coin.","error");}
+});
+$("setInitialPriceBtn").addEventListener("click",async()=>{
+ try{
+  if(!signer||!exchange) throw new Error("Hubungkan wallet owner terlebih dahulu.");
+  if(await exchange.launched()) throw new Error("Exchange sudah launch; harga awal terkunci.");
+  const nativeAmount=$("launchNativeAmount").value;
+  if(!nativeAmount||!Number.isFinite(Number(nativeAmount))||Number(nativeAmount)<=0) throw new Error("Masukkan jumlah native coin untuk launch.");
+  const reserves=await exchange.getReserves();
+  const frnReserve=reserves[0];
+  if(frnReserve<=0n) throw new Error("Cadangan FRN masih nol. Deposit FRN terlebih dahulu.");
+  const nativeWei=parseEth(nativeAmount);
+  const priceScaled=(nativeWei*10n**18n)/frnReserve;
+  if(priceScaled<=0n) throw new Error("Harga hasil perhitungan nol. Periksa jumlah dan desimal token.");
+  await runTx(exchange.setInitialPrice(priceScaled),"Set initial price","adminMessage");
+ }catch(e){message("adminMessage",e?.shortMessage||e?.reason||e?.message||"Gagal mengatur harga awal.","error");}
+});
+$("launchBtn").addEventListener("click",async()=>{
+ try{
+  if(!signer||!exchange) throw new Error("Hubungkan wallet owner terlebih dahulu.");
+  if(await exchange.launched()) throw new Error("Exchange sudah launch.");
+  const nativeAmount=$("launchNativeAmount").value;
+  if(!nativeAmount||!Number.isFinite(Number(nativeAmount))||Number(nativeAmount)<=0) throw new Error("Masukkan jumlah native coin untuk launch.");
+  const reserves=await exchange.getReserves();
+  if(reserves[0]<=0n) throw new Error("Cadangan FRN masih nol.");
+  const configuredPrice=await exchange.initialPriceBnbPerFrn();
+  const expectedPrice=(parseEth(nativeAmount)*10n**18n)/reserves[0];
+  if(configuredPrice!==expectedPrice) throw new Error("Harga awal tidak cocok dengan cadangan FRN/jumlah native coin saat ini. Tekan Hitung & Set Harga Awal lagi.");
+  await runTx(exchange.launch({value:parseEth(nativeAmount)}),"Launch exchange","adminMessage");
+ }catch(e){message("adminMessage",e?.shortMessage||e?.reason||e?.message||"Launch gagal.","error");}
+});
+$("toggleBuyBtn").addEventListener("click",()=>runTx(exchange.setBuyEnabled(!(($("toggleBuyBtn").textContent).includes("Disable"))),"Update Buy status","adminMessage"));
+$("toggleSellBtn").addEventListener("click",()=>runTx(exchange.setSellEnabled(!(($("toggleSellBtn").textContent).includes("Disable"))),"Update Sell status","adminMessage"));
+async function setExchangePaused(target){
+ try{
+  if(!signer || !account) throw new Error("Hubungkan wallet owner terlebih dahulu.");
+  await requireSepolia();
+  const owner=await exchange.owner();
+  if(owner.toLowerCase()!==account.toLowerCase()) throw new Error("Wallet aktif bukan owner kontrak.");
+  const current=await exchange.paused();
+  if(current===target){ message("adminMessage",target?"Exchange sudah dalam keadaan PAUSED.":"Exchange sudah aktif (UNPAUSED).","notice"); await refresh(); return; }
+  message("adminMessage",target?"Meminta wallet menandatangani PAUSE…":"Meminta wallet menandatangani UNPAUSE / RESUME…","notice");
+  // Call only after explicit click, to trigger the wallet signature prompt.
+  const tx=await exchange.setPaused(target);
+  message("adminMessage",`Permintaan dikirim. Menunggu konfirmasi blockchain… Hash: ${tx.hash}`,"notice");
+  $("lastTx").innerHTML=`${target?"Pause":"Unpause"}: <a target="_blank" rel="noopener" href="${txLink(tx.hash)}">${tx.hash}</a>`;
+  const receipt=await tx.wait();
+  if(!receipt || receipt.status!==1) throw new Error("Transaksi tidak berhasil. Periksa TxHash di Etherscan Sepolia.");
+  await refresh();
+  const actual=await exchange.paused();
+  if(actual!==target) throw new Error("Transaksi terkonfirmasi tetapi status paused tidak sesuai. Periksa kontrak dan TxHash.");
+  message("adminMessage",target?"Exchange berhasil di-PAUSE.":"Exchange berhasil di-UNPAUSE / RESUME. Buy/Sell tetap mengikuti pengaturan masing-masing.","success");
+ }catch(e){
+  const msg=e?.shortMessage||e?.reason||e?.message||"Gagal mengubah status pause.";
+  message("adminMessage",msg+" Jika popup tidak muncul, periksa sesi WalletConnect/Bitget Wallet dan coba sambungkan ulang.","error");
+ }
+}
+$("pauseBtn").addEventListener("click",()=>setExchangePaused(true));
+$("unpauseBtn").addEventListener("click",()=>setExchangePaused(false));
+$("setFeeBtn").addEventListener("click",()=>{const v=Number($("adminBuyFee").value);if(!Number.isInteger(v)||v<0||v>200){message("adminMessage","Buy fee harus 0 sampai 200 basis points.","error");return;}runTx(exchange.setBuyFeeBps(v),"Update Buy fee","adminMessage");});
+$("withdrawBtn").addEventListener("click",async()=>{
+ try{
+  const to=$("withdrawTo").value.trim();if(!ethers.isAddress(to))throw new Error("Masukkan alamat penerima yang valid.");
+  const f=$("withdrawFrn").value||"0",e=$("withdrawEth").value||"0";
+  await runTx(exchange.withdrawReserves(to,parseToken(f),parseEth(e)),"Withdraw reserves","adminMessage");
+ }catch(e){message("adminMessage",e.message,"error");}
+});
+$("refreshBtn").addEventListener("click",()=>refresh().catch(e=>message("adminMessage",e.message,"error")));
+updateUsdPrice(0); drawPriceChart();
+// Capture periodic local snapshots while the page is open and connected.
+setInterval(()=>{if(provider && account) refresh().catch(()=>{});},60000);
+if(window.ethereum){
+ window.ethereum.on?.("accountsChanged",()=>location.reload());
+ window.ethereum.on?.("chainChanged",()=>location.reload());
+}
+</script>
+<script src="/freon-api.js" defer></script>
+<script src="/freon-chart-bridge.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+(() => {
+  'use strict';
+
+  let currentRange = '1h';
+  let latestHistory = [];
+  let latestRate = null;
+  let loading = false;
+
+  async function refresh() {
+    if (loading) return;
+    loading = true;
+
+    try {
+      const [historyResponse, rateResponse] = await Promise.all([
+        fetch('/api/price-history?range=' + currentRange, {
+          cache: 'no-store'
+        }),
+        fetch('/api/settings/eth-usd', {
+          cache: 'no-store'
+        })
+      ]);
+
+      if (!historyResponse.ok || !rateResponse.ok) {
+        throw new Error('API harga tidak tersedia');
+      }
+
+      const historyData = await historyResponse.json();
+      latestRate = await rateResponse.json();
+
+      latestHistory = Array.isArray(historyData)
+        ? historyData
+        : historyData.data || historyData.history || [];
+
+      window.dispatchEvent(new CustomEvent('freon:history', {
+        detail: {
+          range: currentRange,
+          history: latestHistory
+        }
+      }));
+
+      window.dispatchEvent(new CustomEvent('freon:eth-usd', {
+        detail: latestRate
+      }));
+
+      console.info(
+        '[FREON] Data grafik diterima:',
+        latestHistory.length,
+        'baris'
+      );
+    } catch (error) {
+      console.error('[FREON]', error.message);
+    } finally {
+      loading = false;
+    }
+  }
+
+  window.FreonServerHistory = () => latestHistory;
+  window.FreonServerRate = () => latestRate;
+
+window.FreonChartBridge = {
+    refresh,
+    setRange(value) {
+      if (!['1h', '24h'].includes(value)) return;
+      currentRange = value;
+      refresh();
+    },
+    getHistory: () => latestHistory,
+    getRate: () => latestRate
+  };
+
+  document.addEventListener('click', event => {
+    const button = event.target.closest('#chart1hBtn, #chart24hBtn');
+    if (!button) return;
+
+    currentRange = button.id === 'chart1hBtn' ? '1h' : '24h';
+    refresh();
+  });
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', refresh);
+  } else {
+    refresh();
+  }
+
+  window.setInterval(refresh, 60000);
+})();
